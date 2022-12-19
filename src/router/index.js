@@ -38,12 +38,12 @@ const routes = [
     path: '/sellerLayout',
     name: 'sellerLayout',
     component: SellerLayout,
-    redirect: '/sellerMain',
+    //redirect: '/menu',
     children: [
       {
         path: '/sellerMain',
         name: 'sellerMain',
-        component: () => import('../views/home/SellerMain')
+        component: () => import('../views/home/SellerMain.vue')
       },
         //菜单
       {
@@ -116,11 +116,11 @@ const router = new VueRouter({
 })
 
 //路由守卫
-// router.beforeEach((to, from, next) => {
-//   const user = Cookies.get("user")
-//   if(!user && to.path !== '/login' && to.path !== '/register') return next("/login") //强制跳转到登录页面
-//   //符合条件放行
-//   next()
-// })
+ router.beforeEach((to, from, next) => {
+   const user = Cookies.get("user")
+   if(!user && to.path !== '/login' && to.path !== '/register') return next("/login") //强制跳转到登录页面
+   //符合条件放行
+   next()
+ })
 
 export default router

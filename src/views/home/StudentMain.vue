@@ -1,5 +1,7 @@
 <template>
-
+  <div>
+    学生主页哈哈
+  </div>
 </template>
 
 <script>
