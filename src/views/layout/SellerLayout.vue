@@ -4,12 +4,12 @@
       <el-aside class="sellerLayoutAside" width="200px">
         <el-menu
           :default-active="$route.path"
-          :default-openeds="['/sellerLayout']"
+          :default-openeds="['/sellerMain']"
           router
           class="sellerLayoutMenu"
         >
           <!--首页-->
-          <el-menu-item index="/sellerLayout">
+          <el-menu-item index="/sellerMain">
             <i class="el-icon-s-home"></i>
             <span>首页</span>
           </el-menu-item>
@@ -17,7 +17,6 @@
             <i class="el-icon-dish"></i>
             <span>菜单</span>
           </el-menu-item>
-
           <el-submenu index="2">
             <template slot="title"><i class="el-icon-menu"></i>导航二</template>
             <el-menu-item-group>
@@ -138,7 +137,7 @@ export default {
 
 .sellerLayoutMain {
   position: absolute;
-  margin-left: 4px;
   margin-top: 82px;
+  padding: 5px;
 }
 </style>
