@@ -150,11 +150,6 @@ export default {
         foodName: "",
         foodPrice: "",
       },
-      user: {
-        roleId: 1,
-        username: "www",
-        password: "www",
-      },
     };
   },
   created() {
