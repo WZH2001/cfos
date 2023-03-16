@@ -90,7 +90,7 @@ export default {
               if (res.code === "A0000") {
                 this.$notify.success("注册成功，请重新登录！");
                 this.$router.push("/login");
-              } else if (res.code === "A0003") {
+              } else if (res.code === "B0003") {
                 this.$notify.error("用户名已存在！");
               }
             });

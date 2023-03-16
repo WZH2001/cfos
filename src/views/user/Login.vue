@@ -80,9 +80,9 @@ export default {
               } else {
                 this.$router.push("/");
               }
-            } else if (res.code === "A0001") {
+            } else if (res.code === "B0001") {
               this.$notify.error("密码错误！");
-            } else if (res.code === "A0002") {
+            } else if (res.code === "B0002") {
               this.$notify.error("用户名不存在，请注册！");
             }
           });

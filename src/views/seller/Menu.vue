@@ -88,7 +88,7 @@
     </div>
     <!--新增表单-->
     <el-dialog title="菜品信息" :visible.sync="addVisible" width="30%">
-      <el-form label-width="80px" size="small">
+      <el-form :model="foodsAdd" label-width="80px" size="small">
         <el-form-item label="菜品名称" prop="foodName">
           <el-input v-model="foodsAdd.foodName"></el-input>
         </el-form-item>
@@ -98,7 +98,7 @@
         <el-form-item label="菜品描述" prop="description">
           <el-input v-model="foodsAdd.description"></el-input>
         </el-form-item>
-        <el-form-item label="是否推荐" prop="isRecommend">
+        <el-form-item label="是否推荐">
           <el-radio v-model="foodsAdd.isRecommend" :label="1">是</el-radio>
           <el-radio v-model="foodsAdd.isRecommend" :label="0">否</el-radio>
         </el-form-item>
@@ -109,17 +109,17 @@
     </el-dialog>
     <!--编辑表单-->
     <el-dialog title="菜品信息" :visible.sync="editVisible" width="30%">
-      <el-form :model="foodsEdit" label-width="80px" size="small">
-        <el-form-item label="菜品名称" prop="foodName">
-          <el-input v-model="foodsEdit.foodName"></el-input>
+      <el-form label-width="80px" size="small">
+        <el-form-item label="菜品名称">
+          <el-input v-model="foodsEdit.foodName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="菜品价格" prop="foodPrice">
+        <el-form-item label="菜品价格">
           <el-input v-model="foodsEdit.foodPrice"></el-input>
         </el-form-item>
-        <el-form-item label="菜品描述" prop="description">
+        <el-form-item label="菜品描述">
           <el-input v-model="foodsEdit.description"></el-input>
         </el-form-item>
-        <el-form-item label="是否推荐" prop="isRecommend">
+        <el-form-item label="是否推荐">
           <el-radio v-model="foodsEdit.isRecommend" :label="1">是</el-radio>
           <el-radio v-model="foodsEdit.isRecommend" :label="0">否</el-radio>
         </el-form-item>
@@ -140,7 +140,7 @@ export default {
     return {
       tableData: [],
       total: 0,
-      foodsAdd: { isRecommend: 1 },
+      foodsAdd: {},
       foodsEdit: {},
       addVisible: false,
       editVisible: false,
@@ -190,7 +190,7 @@ export default {
       request.post("/sellerMenu/foodAdd", this.foodsAdd).then((res) => {
         if (res.code === "A0000") {
           this.$notify.success("添加成功！");
-        } else if (res.code === "B0001") {
+        } else if (res.code === "C0001") {
           this.$notify.error("菜品已存在！");
         }
         this.load();
@@ -198,25 +198,24 @@ export default {
     },
     edit() {
       this.editVisible = false;
-      request
-        .get("/sellerMenu/foodUpdate", { params: this.foodsEdit })
-        .then((res) => {
-          if (res.code === "A0000") {
-            this.$notify.success("修改成功！");
-          }
-        });
+      request.post("/sellerMenu/foodUpdate", this.foodsEdit).then((res) => {
+        if (res.code === "A0000") {
+          this.$notify.success("修改成功！");
+        } else {
+          this.$notify.error("修改失败！");
+        }
+      });
     },
     del(foodId) {
-      request
-        .get("/sellerMenu/foodDelete", { params: this.foodId })
-        .then((res) => {
-          if (res.code === "A0000") {
-            this.$notify.success("删除成功！");
-          } else if (res.code === "B0004") {
-            this.$notify.error("删除失败！");
-          }
-          this.load();
-        });
+      alert(foodId);
+      request.get("/sellerMenu/foodDelete?foodId=" + foodId).then((res) => {
+        if (res.code === "A0000") {
+          this.$notify.success("删除成功！");
+        } else if (res.code === "A0003") {
+          this.$notify.error("删除失败！");
+        }
+        this.load();
+      });
     },
     multipleDel() {},
     handleCurrentChange(pageNum) {
