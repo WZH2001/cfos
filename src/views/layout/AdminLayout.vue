@@ -1,24 +1,12 @@
 <template>
   <div>
     <!--头部区域-->
-    <div
-      style="
-        height: 60px;
-        line-height: 60px;
-        background-color: lightgrey;
-        margin-bottom: 2px;
-        display: flex;
-      "
-    >
+    <div class="head">
       <div style="width: 300px">
-        <img
-          src="@/assets/logo.png"
-          alt=""
-          style="width: 40px; position: relative; top: 10px; left: 20px"
-        />
-        <span style="margin-left: 25px; font-size: 24px">校园订餐管理系统</span>
+        <img src="@/assets/logo.png" alt="" class="img" />
+        <span class="span">校园订餐管理系统</span>
       </div>
-      <div style="flex: 1; text-align: right; padding-right: 20px">
+      <div class="right">
         <el-dropdown size="medium">
           <span class="el-dropdown-link" style="cursor: pointer">
             {{ user.username }}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -36,14 +24,7 @@
     <!--侧边栏和主体-->
     <div style="display: flex">
       <!--侧边栏导航-->
-      <div
-        style="
-          width: 180px;
-          min-height: calc(100vh - 62px);
-          overflow: hidden;
-          margin-right: 2px;
-        "
-      >
+      <div class="navigation">
         <el-menu
           :default-active="$route.path"
           :default-opens="['/']"
@@ -151,3 +132,33 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.head {
+  height: 60px;
+  line-height: 60px;
+  background-color: rgb(102, 183, 160);
+  display: flex;
+}
+.img {
+  width: 40px;
+  position: relative;
+  top: 10px;
+  left: 20px;
+}
+.span {
+  margin-left: 25px;
+  font-size: 24px;
+}
+.right {
+  flex: 1;
+  text-align: right;
+  padding-right: 20px;
+}
+.navigation {
+  width: 180px;
+  min-height: calc(100vh - 60px);
+  overflow: hidden;
+  margin-right: 2px;
+}
+</style>

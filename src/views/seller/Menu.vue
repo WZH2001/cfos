@@ -207,7 +207,6 @@ export default {
       });
     },
     del(foodId) {
-      alert(foodId);
       request.get("/sellerMenu/foodDelete?foodId=" + foodId).then((res) => {
         if (res.code === "A0000") {
           this.$notify.success("删除成功！");
