@@ -38,7 +38,7 @@ const routes = [
     path: '/sellerLayout',
     name: 'sellerLayout',
     component: SellerLayout,
-    //redirect: '/menu',
+    redirect: '/sellerMain',
     children: [
       {
         path: '/sellerMain',
@@ -115,12 +115,12 @@ const router = new VueRouter({
   routes
 })
 
-// //路由守卫
-//  router.beforeEach((to, from, next) => {
-//    const user = Cookies.get("user")
-//    if(!user && to.path !== '/login' && to.path !== '/register') return next("/login") //强制跳转到登录页面
-//    //符合条件放行
-//    next()
-//  })
+//路由守卫
+ router.beforeEach((to, from, next) => {
+   const user = Cookies.get("user")
+   if(!user && to.path !== '/login' && to.path !== '/register') return next("/login") //强制跳转到登录页面
+   //符合条件放行
+   next()
+ })
 
 export default router
