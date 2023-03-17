@@ -69,37 +69,43 @@ const routes = [
       {
         path: '/studentBaseInfo',
         name: 'studentBaseInfo',
-        component: () => import('../views/userManage/StudentBaseInfo.vue')
+        component: () => import('../views/admin/userManage/StudentBaseInfo.vue')
       },
       //商家列表
       {
         path: '/sellerBaseInfo',
         name: 'sellerBaseInfo',
-        component: () => import('../views/userManage/SellerBaseInfo.vue')
+        component: () => import('../views/admin/userManage/SellerBaseInfo.vue')
       },
       //学生订单
       {
         path: '/studentOrder',
         name: 'studentOrder',
-        component: () => import('../views/userManage/StudentOrder.vue')
+        component: () => import('../views/admin/userManage/StudentOrder.vue')
       },
       //学生收藏
       {
         path: '/studentCollect',
         name: 'studentCollect',
-        component: () => import('../views/userManage/StudentCollect.vue')
+        component: () => import('../views/admin/userManage/StudentCollect.vue')
       },
       //商家菜单
       {
         path: '/sellerMenu',
         name: 'sellerMenu',
-        component: () => import('../views/userManage/SellerMenu')
+        component: () => import('../views/admin/userManage/SellerMenu.vue')
       },
       //商家配送员
       {
         path: '/sellerSender',
         name: 'sellerSender',
-        component: () => import('../views/userManage/SellerSender')
+        component: () => import('../views/admin/userManage/SellerSender.vue')
+      },
+      //菜品列表
+      {
+        path: '/menuBaseInfo',
+        name: 'menuBaseInfo',
+        component: () => import('../views/admin/menuManage/MenuBaseInfo.vue')
       }
     ]
   },

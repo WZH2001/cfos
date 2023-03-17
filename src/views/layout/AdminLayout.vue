@@ -60,7 +60,7 @@
               <i class="el-icon-food"></i>
               <span>菜品管理</span>
             </template>
-            <el-menu-item index="/dishesList">
+            <el-menu-item index="/menuBaseInfo">
               <i class="el-icon-chicken"></i>
               <span>菜品查看</span>
             </el-menu-item>
