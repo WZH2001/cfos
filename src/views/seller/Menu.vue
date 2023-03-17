@@ -12,7 +12,7 @@
         placeholder="请输入菜品价格"
         v-model="params.foodPrice"
       ></el-input>
-      <el-button style="margin-left: 5px" type="primary" @click="load"
+      <el-button style="margin-left: 5px" type="primary" @click="fuzzyQueryOne"
         ><i class="el-icon-search">搜索</i></el-button
       >
       <el-button style="margin-left: 5px" type="warning" @click="reset"
@@ -44,7 +44,7 @@
       >
     </div>
     <!--表格-->
-    <el-table :data="tableData" stripe class="seller-menu-table">
+    <el-table :data="tableData" stripe size="small" class="seller-menu-table">
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column prop="foodName" label="菜品名称"></el-table-column>
       <el-table-column prop="foodPrice" label="菜品价格"></el-table-column>
@@ -88,19 +88,39 @@
     </div>
     <!--新增表单-->
     <el-dialog title="菜品信息" :visible.sync="addVisible" width="30%">
-      <el-form :model="foodsAdd" label-width="80px" size="small">
-        <el-form-item label="菜品名称" prop="foodName">
-          <el-input v-model="foodsAdd.foodName"></el-input>
+      <el-form
+        :model="foodsAdd"
+        label-width="80px"
+        size="small"
+        :rules="addRules"
+        ref="menuAddForm"
+      >
+        <el-form-item prop="foodName" label="菜品名称">
+          <el-input
+            placeholder="请输入名称"
+            v-model="foodsAdd.foodName"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="菜品价格" prop="foodPrice">
-          <el-input v-model="foodsAdd.foodPrice"></el-input>
+        <el-form-item prop="foodPrice" label="菜品价格">
+          <el-input-number
+            v-model="foodsAdd.foodPrice"
+            :precision="2"
+            :step="0.1"
+            :max="20"
+          ></el-input-number>
         </el-form-item>
-        <el-form-item label="菜品描述" prop="description">
-          <el-input v-model="foodsAdd.description"></el-input>
+        <el-form-item label="菜品描述">
+          <el-input
+            type="textarea"
+            autosize
+            placeholder="请输入内容"
+            v-model="foodsAdd.description"
+          >
+          </el-input>
         </el-form-item>
         <el-form-item label="是否推荐">
-          <el-radio v-model="foodsAdd.isRecommend" :label="1">是</el-radio>
-          <el-radio v-model="foodsAdd.isRecommend" :label="0">否</el-radio>
+          <el-radio v-model="isRecommend" :label="1">是</el-radio>
+          <el-radio v-model="isRecommend" :label="0">否</el-radio>
         </el-form-item>
         <el-button @click="addVisible = false">取 消</el-button>
         <el-button type="primary" @click="save">确 定</el-button>
@@ -109,19 +129,43 @@
     </el-dialog>
     <!--编辑表单-->
     <el-dialog title="菜品信息" :visible.sync="editVisible" width="30%">
-      <el-form label-width="80px" size="small">
-        <el-form-item label="菜品名称">
-          <el-input v-model="foodsEdit.foodName" autocomplete="off"></el-input>
+      <el-form
+        :model="foodsEdit"
+        label-width="80px"
+        size="small"
+        :rules="editRules"
+        ref="menuEditForm"
+      >
+        <el-form-item prop="foodsEditFoodName" label="菜品名称">
+          <el-input
+            placeholder="请输入名称"
+            v-model="foodsEdit.foodsEditFoodName"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="菜品价格">
-          <el-input v-model="foodsEdit.foodPrice"></el-input>
+        <el-form-item prop="foodsEditFoodPrice" label="菜品价格">
+          <el-input-number
+            v-model="foodsEdit.foodsEditFoodPrice"
+            :precision="2"
+            :step="0.1"
+            :max="20"
+          ></el-input-number>
         </el-form-item>
         <el-form-item label="菜品描述">
-          <el-input v-model="foodsEdit.description"></el-input>
+          <el-input
+            type="textarea"
+            autosize
+            placeholder="请输入内容"
+            v-model="foodsEdit.foodsEditFoodDescription"
+          >
+          </el-input>
         </el-form-item>
         <el-form-item label="是否推荐">
-          <el-radio v-model="foodsEdit.isRecommend" :label="1">是</el-radio>
-          <el-radio v-model="foodsEdit.isRecommend" :label="0">否</el-radio>
+          <el-radio v-model="foodsEdit.foodsEditFoodIsRecommend" :label="1"
+            >是</el-radio
+          >
+          <el-radio v-model="foodsEdit.foodsEditFoodIsRecommend" :label="0"
+            >否</el-radio
+          >
         </el-form-item>
         <el-button @click="editVisible = false">取 消</el-button>
         <el-button type="primary" @click="edit">确 定</el-button>
@@ -133,15 +177,22 @@
 
 <script>
 import request from "@/utils/Request";
-
+let flag = false;
 export default {
   name: "Menu",
   data() {
     return {
+      isRecommend: 1,
       tableData: [],
       total: 0,
       foodsAdd: {},
-      foodsEdit: {},
+      foodsEdit: {
+        foodsEditFoodName: "",
+        foodsEditFoodPrice: "",
+        foodsEditFoodDescription: "",
+        foodsEditFoodIsRecommend: "",
+        foodId: "",
+      },
       addVisible: false,
       editVisible: false,
       params: {
@@ -149,6 +200,18 @@ export default {
         pageSize: 10,
         foodName: "",
         foodPrice: "",
+      },
+      addRules: {
+        foodName: [{ required: true, message: "请输入菜品", trigger: "blur" }],
+        foodPrice: [{ required: true, message: "请输入价格", trigger: "blur" }],
+      },
+      editRules: {
+        foodsEditFoodName: [
+          { required: true, message: "请输入菜品", trigger: "blur" },
+        ],
+        foodsEditFoodPrice: [
+          { required: true, message: "请输入价格", trigger: "blur" },
+        ],
       },
     };
   },
@@ -168,6 +231,23 @@ export default {
           }
         });
     },
+    fuzzyQueryOne() {
+      flag = true;
+      this.params.pageNum = 1;
+      this.fuzzyQuery();
+    },
+    fuzzyQuery() {
+      request
+        .get("/sellerMenu/menuInfoFuzzy", {
+          params: this.params,
+        })
+        .then((res) => {
+          if (res.code === "A0000") {
+            this.tableData = res.data.menuInfoFuzzy;
+            this.total = res.data.total;
+          }
+        });
+    },
     reset() {
       this.params = {
         pageNum: 1,
@@ -181,28 +261,48 @@ export default {
       this.addVisible = true;
       this.foodsAdd = {};
     },
-    menuEdit(foodsEdit) {
-      this.editVisible = true;
-      this.foodsEdit = foodsEdit;
-    },
     save() {
-      this.addVisible = false;
-      request.post("/sellerMenu/foodAdd", this.foodsAdd).then((res) => {
-        if (res.code === "A0000") {
-          this.$notify.success("添加成功！");
-        } else if (res.code === "C0001") {
-          this.$notify.error("菜品已存在！");
+      this.$refs["menuAddForm"].validate((valid) => {
+        if (valid) {
+          this.addVisible = false;
+          request
+            .post("/sellerMenu/foodAdd", {
+              foodName: this.foodsAdd.foodName,
+              foodPrice: this.foodsAdd.foodPrice,
+              description: this.foodsAdd.description,
+              isRecommend: this.isRecommend,
+            })
+            .then((res) => {
+              if (res.code === "A0000") {
+                this.$notify.success("添加成功！");
+              } else if (res.code === "C0001") {
+                this.$notify.error("菜品已存在！");
+              }
+              this.load();
+            });
         }
-        this.load();
       });
     },
+    menuEdit(foodsEdit) {
+      this.editVisible = true;
+      this.foodsEdit.foodsEditFoodName = foodsEdit.foodName;
+      this.foodsEdit.foodsEditFoodPrice = foodsEdit.foodPrice;
+      this.foodsEdit.foodsEditFoodDescription = foodsEdit.description;
+      this.foodsEdit.foodsEditFoodIsRecommend = foodsEdit.isRecommend;
+      this.foodsEdit.foodId = foodsEdit.foodId;
+    },
     edit() {
-      this.editVisible = false;
-      request.post("/sellerMenu/foodUpdate", this.foodsEdit).then((res) => {
-        if (res.code === "A0000") {
-          this.$notify.success("修改成功！");
-        } else {
-          this.$notify.error("修改失败！");
+      this.$refs["menuEditForm"].validate((valid) => {
+        if (valid) {
+          this.editVisible = false;
+          request.post("/sellerMenu/foodUpdate", this.foodsEdit).then((res) => {
+            if (res.code === "A0000") {
+              this.$notify.success("修改成功！");
+            } else {
+              this.$notify.error("修改失败！");
+            }
+            this.load();
+          });
         }
       });
     },
@@ -220,7 +320,11 @@ export default {
     handleCurrentChange(pageNum) {
       //点击分页按钮触发分页
       this.params.pageNum = pageNum;
-      this.load();
+      if (flag == false) {
+        this.load();
+      } else {
+        this.fuzzyQuery();
+      }
     },
   },
 };

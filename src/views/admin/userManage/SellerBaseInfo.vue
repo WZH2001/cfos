@@ -80,7 +80,7 @@ export default {
       total: 0,
       params: {
         pageNum: 1,
-        pageSize: 2,
+        pageSize: 11,
         username: "",
         address: "",
         windowName: "",
