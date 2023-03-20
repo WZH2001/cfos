@@ -45,13 +45,37 @@
     </div>
     <!--表格-->
     <el-table :data="tableData" stripe size="small" class="seller-menu-table">
-      <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="foodName" label="菜品名称"></el-table-column>
-      <el-table-column prop="foodPrice" label="菜品价格"></el-table-column>
-      <el-table-column prop="description" label="菜品描述"></el-table-column>
-      <el-table-column prop="todaySell" label="今日销量"></el-table-column>
-      <el-table-column prop="isRecommend" label="是否推荐"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column
+        align="center"
+        type="selection"
+        width="55"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="foodName"
+        label="菜品名称"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="foodPrice"
+        label="菜品价格"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="description"
+        label="菜品描述"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="todaySell"
+        label="今日销量"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="isRecommend"
+        label="是否推荐"
+      ></el-table-column>
+      <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-button
             type="success"
@@ -288,7 +312,11 @@ export default {
       this.foodsEdit.foodsEditFoodName = foodsEdit.foodName;
       this.foodsEdit.foodsEditFoodPrice = foodsEdit.foodPrice;
       this.foodsEdit.foodsEditFoodDescription = foodsEdit.description;
-      this.foodsEdit.foodsEditFoodIsRecommend = foodsEdit.isRecommend;
+      if (foodsEdit.isRecommend === "已推荐") {
+        this.foodsEdit.foodsEditFoodIsRecommend = 1;
+      } else if (foodsEdit.isRecommend === "未推荐") {
+        this.foodsEdit.foodsEditFoodIsRecommend = 0;
+      }
       this.foodsEdit.foodId = foodsEdit.foodId;
     },
     edit() {

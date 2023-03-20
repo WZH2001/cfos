@@ -26,19 +26,37 @@
     </div>
     <!--表格-->
     <el-table :data="tableData" stripe size="medium">
-      <el-table-column prop="username" label="用户名"></el-table-column>
       <el-table-column
+        align="center"
+        prop="username"
+        label="用户名"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         prop="principalName"
         label="负责人姓名"
       ></el-table-column>
       <el-table-column
+        align="center"
         prop="principalTelephone"
         label="联系方式"
       ></el-table-column>
-      <el-table-column prop="windowName" label="窗口名"></el-table-column>
-      <el-table-column prop="windowAddress" label="地址"></el-table-column>
-      <el-table-column prop="workTime" label="工作时间"></el-table-column>
-      <el-table-column label="查看详情">
+      <el-table-column
+        align="center"
+        prop="windowName"
+        label="窗口名"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="windowAddress"
+        label="地址"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="workTime"
+        label="工作时间"
+      ></el-table-column>
+      <el-table-column align="center" label="查看详情">
         <template v-slot="table">
           <el-button
             type="success"

@@ -2,13 +2,41 @@
   <div>
     <!--表格-->
     <el-table :data="tableData" stripe size="medium">
-      <el-table-column prop="name" label="学生姓名"></el-table-column>
-      <el-table-column prop="orderTime" label="订单时间"></el-table-column>
-      <el-table-column prop="takeTime" label="取餐时间"></el-table-column>
-      <el-table-column prop="foodName" label="菜品名称"></el-table-column>
-      <el-table-column prop="foodPrice" label="菜品价格"></el-table-column>
-      <el-table-column prop="windowName" label="窗口名称"></el-table-column>
-      <el-table-column prop="windowAddress" label="窗口地址"></el-table-column>
+      <el-table-column
+        align="center"
+        prop="name"
+        label="学生姓名"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="orderTime"
+        label="订单时间"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="takeTime"
+        label="取餐时间"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="foodName"
+        label="菜品名称"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="foodPrice"
+        label="菜品价格"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="windowName"
+        label="窗口名称"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="windowAddress"
+        label="窗口地址"
+      ></el-table-column>
     </el-table>
     <!--分页-->
     <div style="margin-top: 20px">

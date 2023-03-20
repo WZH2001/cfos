@@ -29,7 +29,17 @@ const routes = [
       {
         path: '/studentMain',
         name: 'studentMain',
-        component: () => import('../views/home/StudentMain')
+        component: () => import('../views/home/StudentMain.vue')
+      },
+      {
+        path: '/order',
+        name: 'order',
+        component: () => import('../views/student/Order.vue')
+      },
+      {
+        path: '/myOrder',
+        name: 'myOrder',
+        component: () => import('../views/student/MyOrder.vue')
       }
     ]
   },
@@ -50,6 +60,12 @@ const routes = [
         path: '/menu',
         name: 'menu',
         component: () => import('../views/seller/Menu.vue')
+      },  
+        //配送员
+      {
+        path: '/sender',
+        name: 'sender',
+        component: () => import('../views/seller/Sender.vue')
       }
     ]
   },

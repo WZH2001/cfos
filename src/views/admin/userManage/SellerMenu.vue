@@ -5,9 +5,18 @@
     </div>
     <!--表格-->
     <el-table :data="tableData" stripe size="medium">
-      <el-table-column prop="foodName" label="菜品名称"></el-table-column>
-      <el-table-column prop="foodPrice" label="菜品价格"></el-table-column>
       <el-table-column
+        align="center"
+        prop="foodName"
+        label="菜品名称"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="foodPrice"
+        label="菜品价格"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         prop="foodDescription"
         label="菜品描述"
       ></el-table-column>

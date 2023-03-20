@@ -27,9 +27,26 @@
         prop="foodDescription"
         label="菜品描述"
       ></el-table-column>
-      <el-table-column prop="isRecommend" label="是否推荐"></el-table-column>
-      <el-table-column prop="windowName" label="所属窗口"></el-table-column>
-      <el-table-column prop="todaySell" label="今日已卖">份</el-table-column>
+      <el-table-column
+        align="center"
+        prop="isRecommend"
+        label="是否推荐"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="isRecommend"
+        label="是否推荐"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="windowName"
+        label="所属窗口"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="todaySell"
+        label="今日已卖"
+      ></el-table-column>
     </el-table>
     <!--分页-->
     <div style="margin-top: 20px">

@@ -23,11 +23,27 @@
     </div>
     <!--表格-->
     <el-table :data="tableData" stripe size="medium">
-      <el-table-column prop="username" label="用户名"></el-table-column>
-      <el-table-column prop="name" label="姓名"></el-table-column>
-      <el-table-column prop="telephone" label="联系方式"></el-table-column>
-      <el-table-column prop="address" label="寝室地址"></el-table-column>
-      <el-table-column label="查看详情">
+      <el-table-column
+        align="center"
+        prop="username"
+        label="用户名"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="name"
+        label="姓名"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="telephone"
+        label="联系方式"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="address"
+        label="寝室地址"
+      ></el-table-column>
+      <el-table-column align="center" label="查看详情">
         <template v-slot="table">
           <el-button
             type="success"

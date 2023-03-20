@@ -17,6 +17,10 @@
             <i class="el-icon-dish"></i>
             <span>菜单</span>
           </el-menu-item>
+          <el-menu-item index="/sender">
+            <i class="el-icon-s-custom"></i>
+            <span>配送员</span>
+          </el-menu-item>
           <el-submenu index="2">
             <template slot="title"><i class="el-icon-menu"></i>导航二</template>
             <el-menu-item-group>

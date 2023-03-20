@@ -2,9 +2,18 @@
   <div>
     <!--表格-->
     <el-table :data="tableData" stripe size="medium">
-      <el-table-column prop="windowName" label="窗口名"></el-table-column>
-      <el-table-column prop="senderName" label="配送员姓名"></el-table-column>
       <el-table-column
+        align="center"
+        prop="windowName"
+        label="窗口名"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="senderName"
+        label="配送员姓名"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         prop="senderTelephone"
         label="联系方式"
       ></el-table-column>
