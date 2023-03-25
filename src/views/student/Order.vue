@@ -15,7 +15,7 @@
       <el-input
         style="width: 240px; margin-left: 5px"
         placeholder="请输入窗口名称"
-        v-model="params.windwName"
+        v-model="params.windowName"
       ></el-input>
       <el-button style="margin-left: 5px" type="primary" @click="fuzzyQueryOne"
         ><i class="el-icon-search">搜索</i></el-button
@@ -224,6 +224,8 @@ export default {
           if (res.code === "A0000") {
             this.tableData = res.data.allMenuInfo;
             this.total = res.data.total;
+          } else if (res.code === "A0004") {
+            this.$$notify.error("服务器异常！");
           }
         });
     },
@@ -251,6 +253,8 @@ export default {
           if (res.code === "A0000") {
             this.tableData = res.data.menuInfoFuzzy;
             this.total = res.data.total;
+          } else if (res.code === "A0004") {
+            this.$$notify.error("服务器异常！");
           }
         });
     },
@@ -309,6 +313,8 @@ export default {
                 this.$notify.success("订单成功！");
               } else if (res.code === "A0001") {
                 this.$notify.error("订餐失败！");
+              } else if (res.code === "A0004") {
+                this.$$notify.error("服务器异常！");
               }
               this.send.sendTime = "";
               this.num = 1;

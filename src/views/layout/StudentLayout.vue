@@ -18,11 +18,15 @@
             <i class="el-icon-dish"></i>
             <span>订餐</span>
           </el-menu-item>
+          <el-menu-item index="/collect">
+            <i class="el-icon-dish"></i>
+            <span>收藏</span>
+          </el-menu-item>
           <el-menu-item index="/myOrder">
             <i class="el-icon-dish"></i>
             <span>我的订单</span>
           </el-menu-item>
-          <el-menu-item index="/collect">
+          <el-menu-item index="/myCollection">
             <i class="el-icon-dish"></i>
             <span>我的收藏</span>
           </el-menu-item>
