@@ -105,6 +105,7 @@ export default {
     return {
       tableData: [],
       total: 0,
+      currentNum: 0,
       foodIds: [],
       params: {
         pageNum: 1,
@@ -128,8 +129,9 @@ export default {
           if (res.code === "A0000") {
             this.tableData = res.data.notCollectFoodInfo;
             this.total = res.data.total;
+            this.currentNum = res.data.currentNum;
           } else if (res.code === "A0004") {
-            this.$$notify.error("服务器异常！");
+            this.$notify.error("服务器异常！");
           }
         });
     },
@@ -157,8 +159,9 @@ export default {
           if (res.code === "A0000") {
             this.tableData = res.data.notCollectFoodInfoFuzzy;
             this.total = res.data.total;
+            this.currentNum = res.data.currentNum;
           } else if (res.code === "A0004") {
-            this.$$notify.error("服务器异常！");
+            this.$notify.error("服务器异常！");
           }
         });
     },
@@ -173,7 +176,10 @@ export default {
           } else if (res.code === "A0001") {
             this.$notify.error("收藏失败！");
           } else if (res.code === "A0004") {
-            this.$$notify.error("服务器异常！");
+            this.$notify.error("服务器异常！");
+          }
+          if (1 == this.currentNum) {
+            this.params.pageNum = 1;
           }
           this.fuzzyQuery();
         });
@@ -192,12 +198,15 @@ export default {
           } else if (res.code === "A0001") {
             this.$notify.error("收藏失败！");
           } else if (res.code === "A0004") {
-            this.$$notify.error("服务器异常！");
+            this.$notify.error("服务器异常！");
+          }
+          if (this.foodIds.length == this.currentNum) {
+            this.params.pageNum = 1;
           }
           this.fuzzyQuery();
         });
       } else {
-        this.$notify.error("请选择收藏数据！");
+        this.$notify.info("请选择收藏数据！");
       }
     },
     handleCurrentChange(pageNum) {

@@ -16,15 +16,15 @@
           </el-menu-item>
           <el-menu-item index="/order">
             <i class="el-icon-dish"></i>
-            <span>订餐</span>
-          </el-menu-item>
-          <el-menu-item index="/collect">
-            <i class="el-icon-dish"></i>
-            <span>收藏</span>
+            <span>去订餐</span>
           </el-menu-item>
           <el-menu-item index="/myOrder">
             <i class="el-icon-dish"></i>
             <span>我的订单</span>
+          </el-menu-item>
+          <el-menu-item index="/collect">
+            <i class="el-icon-dish"></i>
+            <span>去收藏</span>
           </el-menu-item>
           <el-menu-item index="/myCollection">
             <i class="el-icon-dish"></i>

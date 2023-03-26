@@ -23,60 +23,74 @@
       <el-button style="margin-left: 5px" type="warning" @click="reset"
         ><i class="el-icon-refresh">重置</i></el-button
       >
+      <el-button
+        type="primary"
+        style="margin-left: 5px"
+        @click="preMultipleOrder"
+        ><i class="el-icon-tableware"></i>发起订单</el-button
+      >
     </div>
     <!--表格-->
-    <el-table
-      :data="tableData"
-      stripe
-      size="medium"
-      class="student-order-table"
-    >
-      <el-table-column
-        align="center"
-        prop="foodName"
-        label="菜品名称"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="foodPrice"
-        label="菜品价格"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="windowName"
-        label="窗口名称"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="principalTelephone"
-        label="窗口电话"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="windowAddress"
-        label="窗口地址"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="todaySell"
-        label="已定人数"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="isRecommend"
-        label="是否推荐"
-      ></el-table-column>
-      <el-table-column align="center" label="订餐">
-        <template slot-scope="scope">
-          <el-button
-            type="success"
-            style="margin-right: 5px"
-            @click="orderForm(scope.row)"
-            ><i class="el-icon-tableware"></i>订餐</el-button
-          >
-        </template>
-      </el-table-column>
-    </el-table>
+    <div style="">
+      <el-table
+        :data="tableData"
+        stripe
+        size="medium"
+        @selection-change="handleSelectionChange"
+        class="student-order-table"
+      >
+        <el-table-column
+          align="center"
+          type="selection"
+          width="55"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="foodName"
+          label="菜品名称"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="foodPrice"
+          label="菜品价格"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="windowName"
+          label="窗口名称"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="principalTelephone"
+          label="窗口电话"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="windowAddress"
+          label="窗口地址"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="todaySell"
+          label="已定份数"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="isRecommend"
+          label="是否推荐"
+        ></el-table-column>
+        <el-table-column align="center" label="订餐">
+          <template slot-scope="scope">
+            <el-button
+              type="success"
+              style="margin-right: 5px"
+              @click="orderForm(scope.row)"
+              ><i class="el-icon-tableware"></i>订餐</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
     <!--订单表单-->
     <el-dialog :title="title" :visible.sync="outerVisible" width="30%">
       菜品描述：{{ description }}<br /><br /><br />
@@ -140,6 +154,58 @@
         <el-button type="primary" @click="selectPattern">确定</el-button>
       </div>
     </el-dialog>
+    <el-dialog title="订单" :visible.sync="multiOrderVisible" width="40%">
+      <el-table
+        :data="multiOrderTableData"
+        style="width: 100%; margin-bottom: 20px"
+      >
+        <el-table-column prop="foodName" label="菜品名称"> </el-table-column>
+        <el-table-column prop="foodPrice" label="菜品价格"> </el-table-column>
+        <el-table-column prop="windowName" label="窗口名称"> </el-table-column>
+        <el-table-column label="份数">1 </el-table-column>
+      </el-table>
+      &nbsp;&nbsp;请选择：
+      <el-radio v-model="pattern" label="1">在食堂吃</el-radio>
+      <el-radio v-model="pattern" label="2">食堂配送</el-radio>
+      <el-form
+        :model="multiGet"
+        :rules="multiGetTimeRules"
+        ref="multiGetTime"
+        v-show="pattern == 1"
+        style="margin-top: 20px"
+      >
+        <el-form-item prop="multiGetTime" label="取餐时间：">
+          <el-date-picker
+            v-model="multiGet.multiGetTime"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="pickerOptions"
+          >
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <el-form
+        :model="multiSend"
+        :rules="multiSendTimeRules"
+        ref="multiSendTime"
+        v-show="pattern == 2"
+        style="margin-top: 20px"
+      >
+        <el-form-item prop="multiSendTime" label="配送时间：">
+          <el-date-picker
+            v-model="multiSend.multiSendTime"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="pickerOptions"
+          >
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="multiOrderVisible = false">取 消</el-button>
+        <el-button type="primary" @click="multipleOrder">确 定</el-button>
+      </span>
+    </el-dialog>
     <!--分页-->
     <div style="margin-top: 20px">
       <el-pagination
@@ -166,18 +232,27 @@ export default {
       total: 0,
       description: "",
       foodId: "",
+      foodIds: [],
       outerVisible: false,
       innerVisible1: false,
       innerVisible2: false,
+      multiOrderVisible: false,
       pattern: "1",
       get: {
         getTime: "",
       },
+      multiGet: {
+        multiGetTime: "",
+      },
       send: {
         sendTime: "",
       },
+      multiSend: {
+        multiSendTime: "",
+      },
       num: 1,
       title: "",
+      multiOrderTableData: [],
       params: {
         pageNum: 1,
         pageSize: 10,
@@ -209,6 +284,16 @@ export default {
           { required: true, message: "请输入配送时间", trigger: "blur" },
         ],
       },
+      multiGetTimeRules: {
+        multiGetTime: [
+          { required: true, message: "请输入取餐时间", trigger: "blur" },
+        ],
+      },
+      multiSendTimeRules: {
+        multiSendTime: [
+          { required: true, message: "请输入配送时间", trigger: "blur" },
+        ],
+      },
     };
   },
   created() {
@@ -225,7 +310,7 @@ export default {
             this.tableData = res.data.allMenuInfo;
             this.total = res.data.total;
           } else if (res.code === "A0004") {
-            this.$$notify.error("服务器异常！");
+            this.$notify.error("服务器异常！");
           }
         });
     },
@@ -254,7 +339,7 @@ export default {
             this.tableData = res.data.menuInfoFuzzy;
             this.total = res.data.total;
           } else if (res.code === "A0004") {
-            this.$$notify.error("服务器异常！");
+            this.$notify.error("服务器异常！");
           }
         });
     },
@@ -292,6 +377,7 @@ export default {
               }
               this.get.getTime = "";
               this.num = 1;
+              this.pattern = "1";
               this.fuzzyQuery();
             });
         }
@@ -314,10 +400,85 @@ export default {
               } else if (res.code === "A0001") {
                 this.$notify.error("订餐失败！");
               } else if (res.code === "A0004") {
-                this.$$notify.error("服务器异常！");
+                this.$notify.error("服务器异常！");
               }
               this.send.sendTime = "";
               this.num = 1;
+              this.pattern = "1";
+              this.fuzzyQuery();
+            });
+        }
+      });
+    },
+    handleSelectionChange(selection) {
+      this.foodIds = [];
+      selection.forEach((element) => {
+        this.foodIds.push(element.foodId);
+      });
+      this.multiOrderTableData = [];
+      selection.forEach((element) => {
+        this.multiOrderTableData.push(element);
+      });
+    },
+    preMultipleOrder() {
+      if (this.multiOrderTableData == 0) {
+        this.$notify.info("你还没选择菜品！");
+      } else if (this.multiOrderTableData.length > 5) {
+        this.$notify.info("选择菜品不能超过五样！");
+      } else {
+        this.multiOrderVisible = true;
+      }
+    },
+    multipleOrder() {
+      if (this.pattern == "1") {
+        this.multipleOrderAtCanteen();
+      } else if (this.pattern == "2") {
+        this.multipleDeliveryOrder();
+      }
+    },
+    multipleOrderAtCanteen() {
+      this.$refs["multiGetTime"].validate((valid) => {
+        if (valid) {
+          this.multiOrderVisible = false;
+          request
+            .post("/studentOrder/multipleOrderAtCanteen", {
+              foodIds: this.foodIds,
+              takeTime: this.multiGet.multiGetTime,
+            })
+            .then((res) => {
+              if (res.code === "A0000") {
+                this.$notify.success("订餐成功！");
+              } else if (res.code === "A0001") {
+                this.$notify.error("订餐失败！");
+              } else if (res.code === "A0004") {
+                this.$notify.error("服务器异常！");
+              }
+              this.multiGet.multiGetTime = "";
+              this.pattern = "1";
+              this.fuzzyQuery();
+            });
+        }
+      });
+    },
+    multipleDeliveryOrder() {
+      this.$refs["multiSendTime"].validate((valid) => {
+        if (valid) {
+          this.multiOrderVisible = false;
+          request
+            .post("/studentOrder/multipleDeliveryOrder", {
+              foodIds: this.foodIds,
+              sendTime: this.multiSend.multiSendTime,
+            })
+            .then((res) => {
+              if (res.code === "A0000") {
+                this.$notify.success("订单成功！");
+              } else if (res.code === "A0001") {
+                this.$notify.error("订餐失败！");
+              } else if (res.code === "A0004") {
+                this.$notify.error("服务器异常！");
+              }
+              this.multiSend.multiSendTime = "";
+              this.pattern = "1";
               this.fuzzyQuery();
             });
         }
