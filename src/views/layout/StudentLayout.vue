@@ -15,23 +15,23 @@
             <span>首页</span>
           </el-menu-item>
           <el-menu-item index="/order">
-            <i class="el-icon-dish"></i>
+            <i class="el-icon-s-order"></i>
             <span>去订餐</span>
           </el-menu-item>
           <el-menu-item index="/myOrder">
-            <i class="el-icon-dish"></i>
+            <i class="el-icon-s-order"></i>
             <span>我的订单</span>
           </el-menu-item>
           <el-menu-item index="/collect">
-            <i class="el-icon-dish"></i>
+            <i class="el-icon-star-on"></i>
             <span>去收藏</span>
           </el-menu-item>
           <el-menu-item index="/myCollection">
-            <i class="el-icon-dish"></i>
+            <i class="el-icon-star-on"></i>
             <span>我的收藏</span>
           </el-menu-item>
-          <el-menu-item index="/oldOrder">
-            <i class="el-icon-dish"></i>
+          <el-menu-item index="/previousOrder">
+            <i class="el-icon-video-camera"></i>
             <span>往期订单</span>
           </el-menu-item>
         </el-menu>
@@ -50,7 +50,19 @@
               </span>
               <el-dropdown-menu slot="dropdown" style="margin-top: -15px">
                 <el-dropdown-item>
-                  <div @click="logout"><i class="el-icon-close"></i>退出</div>
+                  <div @click="logout">
+                    <i class="el-icon-plus"></i>完善信息
+                  </div>
+                </el-dropdown-item>
+                <el-dropdown-item>
+                  <div @click="logout">
+                    <i class="el-icon-edit"></i>修改信息
+                  </div>
+                </el-dropdown-item>
+                <el-dropdown-item>
+                  <div @click="logout">
+                    <i class="el-icon-close"></i>退出系统
+                  </div>
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -105,7 +117,7 @@ export default {
   top: 0px;
   height: 80px;
   width: 100%;
-  background-color: #99cc33;
+  background-image: url(@/assets/head.png);
   margin-bottom: 2px;
 }
 

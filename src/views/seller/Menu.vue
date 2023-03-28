@@ -30,7 +30,7 @@
         icon="el-icon-info"
         icon-color="red"
         title="您确定删除吗？"
-        @confirm="multipleDel"
+        @confirm="batchDel"
       >
         <el-button type="danger" slot="reference" style="margin-left: 5px"
           ><i class="el-icon-remove-outline"></i>批量删除</el-button
@@ -44,7 +44,13 @@
       >
     </div>
     <!--表格-->
-    <el-table :data="tableData" stripe size="small" class="seller-menu-table">
+    <el-table
+      :data="tableData"
+      stripe
+      size="small"
+      @selection-change="handleSelectionChange"
+      class="seller-menu-table"
+    >
       <el-table-column
         align="center"
         type="selection"
@@ -129,7 +135,7 @@
           <el-input-number
             v-model="foodsAdd.foodPrice"
             :precision="2"
-            :step="0.1"
+            :step="0.5"
             :max="20"
           ></el-input-number>
         </el-form-item>
@@ -164,13 +170,14 @@
           <el-input
             placeholder="请输入名称"
             v-model="foodsEdit.foodsEditFoodName"
+            disabled
           ></el-input>
         </el-form-item>
         <el-form-item prop="foodsEditFoodPrice" label="菜品价格">
           <el-input-number
             v-model="foodsEdit.foodsEditFoodPrice"
             :precision="2"
-            :step="0.1"
+            :step="0.5"
             :max="20"
           ></el-input-number>
         </el-form-item>
@@ -209,7 +216,9 @@ export default {
       isRecommend: 1,
       tableData: [],
       total: 0,
+      currentNum: 0,
       foodsAdd: {},
+      foodIds: [],
       foodsEdit: {
         foodsEditFoodName: "",
         foodsEditFoodPrice: "",
@@ -230,9 +239,6 @@ export default {
         foodPrice: [{ required: true, message: "请输入价格", trigger: "blur" }],
       },
       editRules: {
-        foodsEditFoodName: [
-          { required: true, message: "请输入菜品", trigger: "blur" },
-        ],
         foodsEditFoodPrice: [
           { required: true, message: "请输入价格", trigger: "blur" },
         ],
@@ -252,6 +258,9 @@ export default {
           if (res.code === "A0000") {
             this.tableData = res.data.menuInfo;
             this.total = res.data.total;
+            this.currentNum = res.data.currentNum;
+          } else if (res.code === "A0004") {
+            this.$notify.error("服务器异常！");
           }
         });
     },
@@ -269,6 +278,9 @@ export default {
           if (res.code === "A0000") {
             this.tableData = res.data.menuInfoFuzzy;
             this.total = res.data.total;
+            this.currentNum = res.data.currentNum;
+          } else if (res.code === "A0004") {
+            this.$notify.error("服务器异常！");
           }
         });
     },
@@ -301,8 +313,12 @@ export default {
                 this.$notify.success("添加成功！");
               } else if (res.code === "C0001") {
                 this.$notify.error("菜品已存在！");
+              } else if (res.code === "A0001") {
+                this.$notify.error("添加失败！");
+              } else if (res.code === "A0004") {
+                this.$notify.error("服务器异常！");
               }
-              this.load();
+              this.fuzzyQuery();
             });
         }
       });
@@ -323,28 +339,67 @@ export default {
       this.$refs["menuEditForm"].validate((valid) => {
         if (valid) {
           this.editVisible = false;
-          request.post("/sellerMenu/foodUpdate", this.foodsEdit).then((res) => {
-            if (res.code === "A0000") {
-              this.$notify.success("修改成功！");
-            } else {
-              this.$notify.error("修改失败！");
-            }
-            this.load();
-          });
+          request
+            .post("/sellerMenu/foodUpdate", {
+              foodName: this.foodsEdit.foodsEditFoodName,
+              foodPrice: this.foodsEdit.foodsEditFoodPrice,
+              description: this.foodsEdit.foodsEditFoodDescription,
+              isRecommend: this.foodsEdit.foodsEditFoodIsRecommend,
+              foodId: this.foodsEdit.foodId,
+            })
+            .then((res) => {
+              if (res.code === "A0000") {
+                this.$notify.success("修改成功！");
+              } else if (res.code === "A0001") {
+                this.$notify.error("修改失败！");
+              } else if (res.code === "A0004") {
+                this.$notify.error("服务器异常！");
+              }
+              this.fuzzyQuery();
+            });
         }
       });
     },
     del(foodId) {
-      request.get("/sellerMenu/foodDelete?foodId=" + foodId).then((res) => {
-        if (res.code === "A0000") {
-          this.$notify.success("删除成功！");
-        } else if (res.code === "A0003") {
-          this.$notify.error("删除失败！");
-        }
-        this.load();
+      request
+        .post("/sellerMenu/foodDelete", {
+          foodId: foodId,
+        })
+        .then((res) => {
+          if (res.code === "A0000") {
+            this.$notify.success("删除成功！");
+          } else if (res.code === "A0001") {
+            this.$notify.error("删除失败！");
+          } else if (res.code === "A0004") {
+            this.$notify.error("服务器异常！");
+          }
+          if (1 == this.currentNum) {
+            this.params.pageNum = 1;
+          }
+          this.fuzzyQuery();
+        });
+    },
+    handleSelectionChange(selection) {
+      this.foodIds = [];
+      selection.forEach((element) => {
+        this.foodIds.push(element.foodId);
       });
     },
-    multipleDel() {},
+    batchDel() {
+      request.post("/sellerMenu/batchDelete", this.foodIds).then((res) => {
+        if (res.code === "A0000") {
+          this.$notify.success("删除成功！");
+        } else if (res.code === "A0001") {
+          this.$notify.error("删除失败！");
+        } else if (res.code === "A0004") {
+          this.$notify.error("服务器异常！");
+        }
+        if (this.foodIds.length == this.currentNum) {
+          this.params.pageNum = 1;
+        }
+        this.fuzzyQuery();
+      });
+    },
     handleCurrentChange(pageNum) {
       //点击分页按钮触发分页
       this.params.pageNum = pageNum;
@@ -367,6 +422,6 @@ export default {
 
 .seller-menu-table {
   margin-top: 10px;
-  width: 1225px;
+  width: 1285px;
 }
 </style>

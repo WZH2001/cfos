@@ -50,7 +50,11 @@ const routes = [
         path: '/myCollection',
         name: 'myCollection',
         component: () => import('../views/student/MyCollection.vue')
-      }
+      },{
+        path: '/previousOrder',
+        name: 'previousOrder',
+        component: () => import('../views/student/PreviousOrder.vue')
+      },
     ]
   },
     //商家主页

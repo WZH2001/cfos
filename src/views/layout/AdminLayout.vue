@@ -30,7 +30,7 @@
           :default-opens="['/']"
           router
           class="el-menu-demo"
-          background-color="rgb(48, 65, 86)"
+          background-color="#CCCCFF"
           text-color="#fff"
           style="min-height: 100%; overflow-x: hidden"
         >
@@ -137,7 +137,7 @@ export default {
 .head {
   height: 60px;
   line-height: 60px;
-  background-color: rgb(102, 183, 160);
+  background-image: url(@/assets/head.png);
   display: flex;
 }
 .img {

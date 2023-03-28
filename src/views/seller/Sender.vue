@@ -31,6 +31,11 @@
       ></el-table-column>
       <el-table-column
         align="center"
+        prop="isWork"
+        label="工作状态"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         prop="workDate"
         label="入职日期"
       ></el-table-column>
@@ -135,6 +140,7 @@ export default {
       disabled: -1,
       tableData: [],
       total: 0,
+      currentNum: 0,
       params: {
         pageNum: 1,
         pageSize: 10,
@@ -142,10 +148,12 @@ export default {
       addVisible: false,
       editVisible: false,
       senderAdd: {},
+      sender: {},
       senderEdit: {
         senderEditSenderName: "",
         senderEditSenderTelephone: "",
         senderId: "",
+        sellerId: "",
       },
       addRules: {
         senderName: [
@@ -186,6 +194,9 @@ export default {
           if (res.code === "A0000") {
             this.tableData = res.data.senderInfo;
             this.total = res.data.total;
+            this.currentNum = res.data.currentNum;
+          } else if (res.code === "A0004") {
+            this.$notify.error("服务器异常！");
           }
         });
     },
@@ -204,6 +215,10 @@ export default {
                 this.$notify.success("添加成功！");
               } else if (res.code === "A0001") {
                 this.$notify.error("添加失败！");
+              } else if (res.code === "A0004") {
+                this.$notify.error("服务器异常！");
+              } else if (res.code === "D0001") {
+                this.$notify.error("配送员已存在！");
               }
               this.load();
             });
@@ -212,6 +227,7 @@ export default {
     },
     preSenderEdit(sender) {
       this.editVisible = true;
+      this.sender = sender;
       this.senderEdit.senderEditSenderName = sender.senderName;
       this.senderEdit.senderEditSenderTelephone = sender.telephone;
       this.senderEdit.senderId = sender.senderId;
@@ -219,17 +235,33 @@ export default {
     edit() {
       this.$refs["senderEditForm"].validate((valid) => {
         if (valid) {
-          this.editVisible = false;
-          request
-            .post("/sellerSender/senderUpdate", this.senderEdit)
-            .then((res) => {
-              if (res.code === "A0000") {
-                this.$notify.success("修改成功！");
-              } else if (res.code === "A0001") {
-                this.$notify.error("修改失败！");
-              }
-              this.load();
-            });
+          if (
+            this.senderEdit.senderEditSenderName == this.sender.senderName &&
+            this.senderEdit.senderEditSenderTelephone == this.sender.telephone
+          ) {
+            this.$notify.info("你还未修改任何数据！");
+          } else {
+            this.editVisible = false;
+            request
+              .post("/sellerSender/senderUpdate", {
+                senderName: this.senderEdit.senderEditSenderName,
+                telephone: this.senderEdit.senderEditSenderTelephone,
+                senderId: this.senderEdit.senderId,
+                sellerId: this.senderEdit.sellerId,
+              })
+              .then((res) => {
+                if (res.code === "A0000") {
+                  this.$notify.success("修改成功！");
+                } else if (res.code === "A0001") {
+                  this.$notify.error("修改失败！");
+                } else if (res.code === "A0004") {
+                  this.$notify.error("服务器异常！");
+                } else if (res.code === "D0001") {
+                  this.$notify.error("配送员已存在！");
+                }
+                this.load();
+              });
+          }
         }
       });
     },
@@ -241,6 +273,8 @@ export default {
             this.$notify.success("删除成功！");
           } else if (res.code === "A0001") {
             this.$notify.error("修改失败！");
+          } else if (res.code === "A0004") {
+            this.$notify.error("服务器异常！");
           }
           this.load();
         });
@@ -263,6 +297,6 @@ export default {
 
 .seller-sender-table {
   margin-top: 10px;
-  width: 1225px;
+  width: 1285px;
 }
 </style>

@@ -1,8 +1,6 @@
 <template>
   <div class="loginPage">
-    <div class="loginHead">
-      <span>欢迎来到校园订餐系统</span>
-    </div>
+    <div class="loginHead" style="height: 50px"></div>
     <div class="loginForm">
       <div class="loginWord">登 录</div>
       <el-form :model="user" :rules="rules" ref="loginForm">
@@ -35,7 +33,7 @@
       </el-form>
       <div class="loginBottom">
         <router-link :to="{ path: '/register' }" class="toRegister"
-          >点击注册</router-link
+          ><el-link type="primary">点击注册</el-link></router-link
         >
       </div>
     </div>
@@ -96,19 +94,8 @@ export default {
 <style>
 .loginPage {
   height: 100vh;
-  background-color: dodgerblue;
-}
-
-.loginHead {
-  position: relative;
-  width: 400px;
-  height: 50px;
-  top: 60px;
-  left: 50%;
-  transform: translate(-50%);
-  font-size: 40px;
-  text-align: center;
-  color: skyblue;
+  background-image: url(@/assets/login.png);
+  background-size: cover;
 }
 
 .loginForm {
@@ -136,6 +123,7 @@ export default {
 
 .loginBottom {
   text-align: right;
+  margin-top: 40px;
 }
 
 .toRegister {

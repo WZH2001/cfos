@@ -1,11 +1,12 @@
 <template>
   <div>
     <el-container class="sellerLayoutOuterContainer">
-      <el-aside class="sellerLayoutAside" width="200px">
+      <el-aside class="sellerLayoutAside" width="140px">
         <el-menu
           :default-active="$route.path"
           :default-openeds="['/sellerMain']"
           router
+          background-color="#CCCCFF"
           class="sellerLayoutMenu"
         >
           <!--首页-->
@@ -92,7 +93,6 @@ export default {
 }
 
 .sellerLayoutAside {
-  background-color: rgb(238, 241, 246);
   box-shadow: 2px 0 6px rgb(0 21 41 / 35%);
 }
 
@@ -108,7 +108,7 @@ export default {
   top: 0px;
   height: 80px;
   width: 100%;
-  background-color: skyblue;
+  background-image: url(@/assets/head.png);
   margin-bottom: 2px;
 }
 

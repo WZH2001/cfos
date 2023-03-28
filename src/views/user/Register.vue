@@ -1,12 +1,10 @@
 <template>
   <div class="registerPage">
-    <div class="registerHead">
-      <span>欢迎来到校园订餐系统</span>
-    </div>
+    <div class="registerHead" style="height: 50px"></div>
     <div class="registerForm">
       <div class="registerWord">注 册</div>
       <el-form :model="user" :rules="rules" ref="registerForm">
-        <el-form-item label="请选择角色：">
+        <el-form-item label="请选择角色：" style="margin-top: 20px">
           <el-radio v-model="user.roleId" :label="1">学生</el-radio>
           <el-radio v-model="user.roleId" :label="2">商家</el-radio>
         </el-form-item>
@@ -47,7 +45,7 @@
         >
       </el-form>
       <div class="registerBottom">
-        <a href="/login">返回登录</a>
+        <el-link type="primary" href="/login">返回登录</el-link>
       </div>
     </div>
   </div>
@@ -105,19 +103,8 @@ export default {
 <style>
 .registerPage {
   height: 100vh;
-  background-color: dodgerblue;
-}
-
-.registerHead {
-  position: relative;
-  width: 400px;
-  height: 50px;
-  top: 60px;
-  left: 50%;
-  transform: translate(-50%);
-  font-size: 40px;
-  text-align: center;
-  color: skyblue;
+  background-image: url(@/assets/login.png);
+  background-size: cover;
 }
 
 .registerForm {
@@ -144,6 +131,7 @@ export default {
 
 .registerBottom {
   text-align: right;
+  margin-top: 40px;
 }
 
 .registerBottom a {
