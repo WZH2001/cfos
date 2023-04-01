@@ -75,6 +75,26 @@ const routes = [
         name: 'menu',
         component: () => import('../views/seller/Menu.vue')
       },  
+      {
+        path: '/takeOrderUnfinished',
+        name: 'takeOrderUnfinished',
+        component: () => import('../views/seller/TakeOrderUnfinished.vue')
+      },
+      {
+        path: '/takeOrderFinished',
+        name: 'takeOrderFinished',
+        component: () => import('../views/seller/TakeOrderFinished.vue')
+      },
+      {
+        path: '/sendOrderUnfinished',
+        name: 'sendOrderUnfinished',
+        component: () => import('../views/seller/SendOrderUnfinished.vue')
+      },
+      {
+        path: '/sendOrderFinished',
+        name: 'sendOrderFinished',
+        component: () => import('../views/seller/SendOrderFinished.vue')
+      },
         //配送员
       {
         path: '/sender',

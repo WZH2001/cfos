@@ -68,11 +68,6 @@
       ></el-table-column>
       <el-table-column
         align="center"
-        prop="description"
-        label="菜品描述"
-      ></el-table-column>
-      <el-table-column
-        align="center"
         prop="todaySell"
         label="今日销量"
       ></el-table-column>
@@ -83,6 +78,12 @@
       ></el-table-column>
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
+          <el-button
+            type="success"
+            style="margin-right: -5px"
+            @click="menuDescription(scope.row.description)"
+            >描述<i class="el-icon-more"></i
+          ></el-button>
           <el-button
             type="success"
             style="margin-right: 5px"
@@ -170,7 +171,6 @@
           <el-input
             placeholder="请输入名称"
             v-model="foodsEdit.foodsEditFoodName"
-            disabled
           ></el-input>
         </el-form-item>
         <el-form-item prop="foodsEditFoodPrice" label="菜品价格">
@@ -203,6 +203,15 @@
       </el-form>
       <div slot="footer" class="dialog-footer"></div>
     </el-dialog>
+    <!--描述-->
+    <el-dialog title="菜品描述" :visible.sync="descriptionVisible" width="30%">
+      {{ description }}
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="descriptionVisible = false"
+          >返回</el-button
+        >
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -219,6 +228,8 @@ export default {
       currentNum: 0,
       foodsAdd: {},
       foodIds: [],
+      foodName: "",
+      food: {},
       foodsEdit: {
         foodsEditFoodName: "",
         foodsEditFoodPrice: "",
@@ -228,6 +239,8 @@ export default {
       },
       addVisible: false,
       editVisible: false,
+      descriptionVisible: false,
+      description: "",
       params: {
         pageNum: 1,
         pageSize: 10,
@@ -239,6 +252,9 @@ export default {
         foodPrice: [{ required: true, message: "请输入价格", trigger: "blur" }],
       },
       editRules: {
+        foodsEditFoodName: [
+          { required: true, message: "请输入菜品", trigger: "blur" },
+        ],
         foodsEditFoodPrice: [
           { required: true, message: "请输入价格", trigger: "blur" },
         ],
@@ -325,38 +341,54 @@ export default {
     },
     menuEdit(foodsEdit) {
       this.editVisible = true;
+      this.food = foodsEdit;
+      this.foodName = foodsEdit.foodName;
       this.foodsEdit.foodsEditFoodName = foodsEdit.foodName;
       this.foodsEdit.foodsEditFoodPrice = foodsEdit.foodPrice;
       this.foodsEdit.foodsEditFoodDescription = foodsEdit.description;
       if (foodsEdit.isRecommend === "已推荐") {
         this.foodsEdit.foodsEditFoodIsRecommend = 1;
+        this.food.isisRecommend = 1;
       } else if (foodsEdit.isRecommend === "未推荐") {
         this.foodsEdit.foodsEditFoodIsRecommend = 0;
+        this.food.isisRecommend = 0;
       }
       this.foodsEdit.foodId = foodsEdit.foodId;
     },
     edit() {
       this.$refs["menuEditForm"].validate((valid) => {
         if (valid) {
-          this.editVisible = false;
-          request
-            .post("/sellerMenu/foodUpdate", {
-              foodName: this.foodsEdit.foodsEditFoodName,
-              foodPrice: this.foodsEdit.foodsEditFoodPrice,
-              description: this.foodsEdit.foodsEditFoodDescription,
-              isRecommend: this.foodsEdit.foodsEditFoodIsRecommend,
-              foodId: this.foodsEdit.foodId,
-            })
-            .then((res) => {
-              if (res.code === "A0000") {
-                this.$notify.success("修改成功！");
-              } else if (res.code === "A0001") {
-                this.$notify.error("修改失败！");
-              } else if (res.code === "A0004") {
-                this.$notify.error("服务器异常！");
-              }
-              this.fuzzyQuery();
-            });
+          if (
+            this.food.foodName === this.foodsEdit.foodsEditFoodName &&
+            this.food.foodPrice == this.foodsEdit.foodsEditFoodPrice &&
+            this.food.description === this.foodsEdit.foodsEditFoodDescription &&
+            this.food.isisRecommend === this.foodsEdit.foodsEditFoodIsRecommend
+          ) {
+            this.$notify.info("你还没有修改任何数据！");
+          } else {
+            this.editVisible = false;
+            request
+              .post("/sellerMenu/foodUpdate", {
+                oldFoodName: this.foodName,
+                foodName: this.foodsEdit.foodsEditFoodName,
+                foodPrice: this.foodsEdit.foodsEditFoodPrice,
+                description: this.foodsEdit.foodsEditFoodDescription,
+                isRecommend: this.foodsEdit.foodsEditFoodIsRecommend,
+                foodId: this.foodsEdit.foodId,
+              })
+              .then((res) => {
+                if (res.code === "A0000") {
+                  this.$notify.success("修改成功！");
+                } else if (res.code === "A0001") {
+                  this.$notify.error("修改失败！");
+                } else if (res.code === "A0004") {
+                  this.$notify.error("服务器异常！");
+                } else if (res.code === "C0001") {
+                  this.$notify.error("菜品已存在！");
+                }
+                this.fuzzyQuery();
+              });
+          }
         }
       });
     },
@@ -399,6 +431,10 @@ export default {
         }
         this.fuzzyQuery();
       });
+    },
+    menuDescription(description) {
+      this.descriptionVisible = true;
+      this.description = description;
     },
     handleCurrentChange(pageNum) {
       //点击分页按钮触发分页

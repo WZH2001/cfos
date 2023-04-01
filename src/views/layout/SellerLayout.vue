@@ -10,33 +10,30 @@
           class="sellerLayoutMenu"
         >
           <!--首页-->
-          <el-menu-item index="/sellerMain">
+          <el-menu-item index="sellerMain">
             <i class="el-icon-s-home"></i>
             <span>首页</span>
           </el-menu-item>
-          <el-menu-item index="/menu">
+          <el-menu-item index="menu">
             <i class="el-icon-dish"></i>
             <span>菜单</span>
           </el-menu-item>
-          <el-menu-item index="/sender">
+          <el-submenu index="1">
+            <template slot="title">
+              <i class="el-icon-s-order"></i>
+              <span>今日订单</span>
+            </template>
+            <el-menu-item index="takeOrderUnfinished"
+              ><span>自取餐订单</span></el-menu-item
+            >
+            <el-menu-item index="sendOrderUnfinished"
+              ><span>配送订单</span></el-menu-item
+            >
+          </el-submenu>
+          <el-menu-item index="sender">
             <i class="el-icon-s-custom"></i>
             <span>配送员</span>
           </el-menu-item>
-          <el-submenu index="2">
-            <template slot="title"><i class="el-icon-menu"></i>导航二</template>
-            <el-menu-item-group>
-              <template slot="title">分组一</template>
-              <el-menu-item index="">选项1</el-menu-item>
-              <el-menu-item index="2-2">选项2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="2-3">选项3</el-menu-item>
-            </el-menu-item-group>
-            <el-submenu index="2-4">
-              <template slot="title">选项4</template>
-              <el-menu-item index="2-4-1">选项4-1</el-menu-item>
-            </el-submenu>
-          </el-submenu>
         </el-menu>
       </el-aside>
       <el-container>

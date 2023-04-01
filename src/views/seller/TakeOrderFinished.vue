@@ -1,0 +1,134 @@
+<template>
+  <div>
+    <div>
+      <el-button
+        style="margin-left: 10px"
+        type="primary"
+        @click="returnTakeOrder"
+        >返回</el-button
+      >
+    </div>
+    <div>
+      <!--表格-->
+      <el-table
+        :data="tableData"
+        stripe
+        size="small"
+        class="seller-todayOrder-table"
+      >
+        <el-table-column
+          align="center"
+          prop="foodName"
+          label="菜品名称"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="foodPrice"
+          label="菜品价格"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="studentName"
+          label="学生姓名"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="studentTelephone"
+          label="学生电话"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="studentAddress"
+          label="学生地址"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="orderTime"
+          label="下单时间"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="orderNumber"
+          label="下单份数"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="takeTime"
+          label="取餐时间"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="isFinish"
+          label="是否完成"
+        ></el-table-column>
+      </el-table>
+      <!--分页-->
+      <div style="margin-top: 20px">
+        <el-pagination
+          background
+          :current-page="params.pageNum"
+          :page-size="params.pageSize"
+          @current-change="handleCurrentChange"
+          layout="prev, pager, next"
+          :total="total"
+        >
+        </el-pagination>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import request from "@/utils/Request";
+export default {
+  name: "TakeOrder",
+  data() {
+    return {
+      tableData: [],
+      total: 0,
+      currentNum: 0,
+      params: {
+        pageNum: 1,
+        pageSize: 14,
+      },
+    };
+  },
+  created() {
+    this.load();
+  },
+  mounted() {
+    setInterval(this.load, 60000);
+  },
+  methods: {
+    load() {
+      request
+        .get("/todayOrder/takeOrderFinishedInfo", {
+          params: this.params,
+        })
+        .then((res) => {
+          if (res.code === "A0000") {
+            this.tableData = res.data.takeOrderFinishedInfo;
+            this.total = res.data.total;
+            this.currentNum = res.data.currentNum;
+          } else if (res.code === "A0004") {
+            this.$notify.error("服务器异常！");
+          }
+        });
+    },
+    returnTakeOrder() {
+      this.$router.push("/takeOrderUnfinished");
+    },
+    handleCurrentChange(pageNum) {
+      this.params.pageNum = pageNum;
+      this.load();
+    },
+  },
+};
+</script>
+
+<style>
+.seller-todayOrder-table {
+  margin-top: 10px;
+  width: 1285px;
+}
+</style>

@@ -31,8 +31,8 @@
       ></el-table-column>
       <el-table-column
         align="center"
-        prop="isWork"
-        label="工作状态"
+        prop="sendNumber"
+        label="今日配送单数"
       ></el-table-column>
       <el-table-column
         align="center"
@@ -267,7 +267,9 @@ export default {
     },
     del(senderId) {
       request
-        .get("/sellerSender/senderDelete?senderId=" + senderId)
+        .post("/sellerSender/senderDelete", {
+          senderId: senderId,
+        })
         .then((res) => {
           if (res.code === "A0000") {
             this.$notify.success("删除成功！");

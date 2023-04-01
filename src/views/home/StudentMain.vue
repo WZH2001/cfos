@@ -1,15 +1,11 @@
 <template>
-  <div>
-    学生主页哈哈
-  </div>
+  <div>学生主页哈哈</div>
 </template>
 
 <script>
 export default {
-  name: "StudentMain"
-}
+  name: "StudentMain",
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
