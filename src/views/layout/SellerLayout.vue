@@ -1,13 +1,15 @@
 <template>
   <div>
     <el-container class="sellerLayoutOuterContainer">
-      <el-aside class="sellerLayoutAside" width="140px">
+      <!-- <el-aside class="sellerLayoutAside" width="140px"> -->
+      <div class="navigation">
         <el-menu
           :default-active="$route.path"
-          :default-openeds="['/sellerMain']"
+          :default-opens="['/sellerMain']"
           router
+          class="el-menu-demo"
           background-color="#CCCCFF"
-          class="sellerLayoutMenu"
+          style="min-height: 100%; overflow-x: hidden"
         >
           <!--首页-->
           <el-menu-item index="sellerMain">
@@ -18,24 +20,24 @@
             <i class="el-icon-dish"></i>
             <span>菜单</span>
           </el-menu-item>
-          <el-submenu index="1">
+          <el-submenu index="todayOrder">
             <template slot="title">
               <i class="el-icon-s-order"></i>
               <span>今日订单</span>
             </template>
-            <el-menu-item index="takeOrderUnfinished"
-              ><span>自取餐订单</span></el-menu-item
-            >
-            <el-menu-item index="sendOrderUnfinished"
-              ><span>配送订单</span></el-menu-item
-            >
+            <el-menu-item index="/takeOrderUnfinished">
+              <span>自取餐订单</span>
+            </el-menu-item>
+            <el-menu-item index="/sendOrderUnfinished">
+              <span>商家管理</span>
+            </el-menu-item>
           </el-submenu>
           <el-menu-item index="sender">
             <i class="el-icon-s-custom"></i>
             <span>配送员</span>
           </el-menu-item>
         </el-menu>
-      </el-aside>
+      </div>
       <el-container>
         <div class="sellerLayoutHead">
           <div class="sellerLayoutLeft">
@@ -89,10 +91,6 @@ export default {
   border: 1px solid #eee;
 }
 
-.sellerLayoutAside {
-  box-shadow: 2px 0 6px rgb(0 21 41 / 35%);
-}
-
 .sellerLayoutMenu {
   min-height: 100%;
   overflow-x: hidden;
@@ -140,5 +138,13 @@ export default {
   position: absolute;
   margin-top: 82px;
   padding: 5px;
+}
+
+.navigation {
+  width: 140px;
+  min-height: calc(100vh - 60px);
+  overflow: hidden;
+  margin-right: 2px;
+  box-shadow: 2px 0 6px rgb(0 21 41 / 35%);
 }
 </style>
