@@ -97,7 +97,7 @@ export default {
     this.load();
   },
   mounted() {
-    setInterval(this.load, 60000);
+    setInterval(this.load, 60 * 1000);
   },
   methods: {
     load() {

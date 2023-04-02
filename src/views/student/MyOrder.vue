@@ -213,6 +213,9 @@ export default {
   created() {
     this.load();
   },
+  mounted() {
+    setInterval(this.load, 30 * 1000);
+  },
   methods: {
     load() {
       request
