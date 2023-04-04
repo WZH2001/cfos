@@ -136,12 +136,6 @@ const routes = [
         name: 'studentBaseInfo',
         component: () => import('../views/admin/userManage/StudentBaseInfo.vue')
       },
-      //商家列表
-      {
-        path: '/sellerBaseInfo',
-        name: 'sellerBaseInfo',
-        component: () => import('../views/admin/userManage/SellerBaseInfo.vue')
-      },
       //学生订单
       {
         path: '/studentOrder',
@@ -153,6 +147,12 @@ const routes = [
         path: '/studentCollect',
         name: 'studentCollect',
         component: () => import('../views/admin/userManage/StudentCollect.vue')
+      },
+       //商家列表
+       {
+        path: '/sellerBaseInfo',
+        name: 'sellerBaseInfo',
+        component: () => import('../views/admin/userManage/SellerBaseInfo.vue')
       },
       //商家菜单
       {

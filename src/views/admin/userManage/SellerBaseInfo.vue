@@ -51,23 +51,12 @@
         prop="windowAddress"
         label="地址"
       ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="workTime"
-        label="工作时间"
-      ></el-table-column>
       <el-table-column align="center" label="查看详情">
         <template v-slot="table">
-          <el-button
-            type="success"
-            @click="$router.push('/sellerMenu?sellerId=' + table.row.sellerId)"
+          <el-button type="success" @click="toSellerMenu(table.row)"
             >菜单<i class="el-icon-more"></i
           ></el-button>
-          <el-button
-            type="success"
-            @click="
-              $router.push('/sellerSender?sellerId=' + table.row.sellerId)
-            "
+          <el-button type="success" @click="toSellerSender(table.row)"
             >配送员<i class="el-icon-more"></i
           ></el-button>
         </template>
@@ -118,6 +107,8 @@ export default {
           if (res.code === "A0000") {
             this.tableData = res.data.sellerBaseInfo;
             this.total = res.data.total;
+          } else if (res.code === "A0004") {
+            this.$notify.error("服务器异常！");
           }
         });
     },
@@ -135,6 +126,8 @@ export default {
           if (res.code === "A0000") {
             this.tableData = res.data.sellerBaseInfoFuzzy;
             this.total = res.data.total;
+          } else if (res.code === "A0004") {
+            this.$notify.error("服务器异常！");
           }
         });
     },
@@ -147,6 +140,18 @@ export default {
         windowName: "",
       };
       this.load();
+    },
+    toSellerMenu(data) {
+      this.$router.push({
+        path: "/sellerMenu",
+        query: { sellerId: data.sellerId, windowName: data.windowName },
+      });
+    },
+    toSellerSender(data) {
+      this.$router.push({
+        path: "/sellerSender",
+        query: { sellerId: data.sellerId, windowName: data.windowName },
+      });
     },
     handleCurrentChange(pageNum) {
       //点击分页按钮触发分页

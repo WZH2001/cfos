@@ -1,7 +1,15 @@
 <template>
   <div>
-    <div class="top">
-      <h2>江 川 特 色 菜</h2>
+    <div>
+      <span style="text-align: center; display: block"
+        >窗口名称：{{ windowName }}</span
+      >
+      <el-button
+        style="margin-left: 10px"
+        type="primary"
+        @click="returnSellerBaseInfo"
+        >返回</el-button
+      >
     </div>
     <!--表格-->
     <el-table :data="tableData" stripe size="medium">
@@ -17,10 +25,24 @@
       ></el-table-column>
       <el-table-column
         align="center"
-        prop="foodDescription"
-        label="菜品描述"
+        prop="createTime"
+        label="添加时间"
       ></el-table-column>
-      <el-table-column prop="isRecommend" label="是否推荐"></el-table-column>
+      <el-table-column
+        align="center"
+        prop="updateTime"
+        label="最近更新时间"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="todaySell"
+        label="今日销量"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="isRecommend"
+        label="是否推荐"
+      ></el-table-column>
     </el-table>
     <!--分页-->
     <div style="margin-top: 20px">
@@ -45,6 +67,7 @@ export default {
     return {
       tableData: [],
       total: 0,
+      windowName: this.$route.query.windowName,
       params: {
         pageNum: 1,
         pageSize: 13,
@@ -65,8 +88,13 @@ export default {
           if (res.code === "A0000") {
             this.tableData = res.data.sellerFoodInfo;
             this.total = res.data.total;
+          } else if (res.code === "A0004") {
+            this.$notify.error("服务器异常！");
           }
         });
+    },
+    returnSellerBaseInfo() {
+      this.$router.push("/sellerBaseInfo");
     },
     handleCurrentChange(pageNum) {
       //点击分页按钮触发分页

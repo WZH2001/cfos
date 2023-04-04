@@ -1,17 +1,18 @@
 <template>
   <div>
+    <div>
+      <span style="text-align: center; display: block"
+        >学生姓名：{{ studentName }}</span
+      >
+      <el-button
+        style="margin-left: 10px"
+        type="primary"
+        @click="returnStudentBaseInfo"
+        >返回</el-button
+      >
+    </div>
     <!--表格-->
-    <el-table :data="tableData" stripe size="medium">
-      <el-table-column
-        align="center"
-        prop="name"
-        label="学生姓名"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="collectTime"
-        label="收藏时间"
-      ></el-table-column>
+    <el-table :data="tableData" stripe size="small">
       <el-table-column
         align="center"
         prop="foodName"
@@ -31,6 +32,11 @@
         align="center"
         prop="windowAddress"
         label="窗口地址"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="collectTime"
+        label="收藏时间"
       ></el-table-column>
     </el-table>
     <!--分页-->
@@ -56,9 +62,10 @@ export default {
     return {
       tableData: [],
       total: 0,
+      studentName: this.$route.query.studentName,
       params: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 15,
         studentId: this.$route.query.studentId,
       },
     };
@@ -76,8 +83,13 @@ export default {
           if (res.code === "A0000") {
             this.tableData = res.data.studentCollectInfo;
             this.total = res.data.total;
+          } else if (res.code === "A0004") {
+            this.$notify.error("服务器异常！");
           }
         });
+    },
+    returnStudentBaseInfo() {
+      this.$router.push("/studentBaseInfo");
     },
     handleCurrentChange(pageNum) {
       //点击分页按钮触发分页

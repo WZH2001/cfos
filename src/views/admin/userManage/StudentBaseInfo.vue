@@ -45,18 +45,10 @@
       ></el-table-column>
       <el-table-column align="center" label="查看详情">
         <template v-slot="table">
-          <el-button
-            type="success"
-            @click="
-              $router.push('/studentOrder?studentId=' + table.row.studentId)
-            "
+          <el-button type="success" @click="toStudentOrder(table.row)"
             >订单<i class="el-icon-more"></i
           ></el-button>
-          <el-button
-            type="success"
-            @click="
-              $router.push('/studentCollect?studentId=' + table.row.studentId)
-            "
+          <el-button type="success" @click="toStudentCollect(table.row)"
             >收藏<i class="el-icon-more"></i
           ></el-button>
         </template>
@@ -107,6 +99,8 @@ export default {
           if (res.code === "A0000") {
             this.tableData = res.data.studentBaseInfo;
             this.total = res.data.total;
+          } else if (res.code === "A0004") {
+            this.$notify.error("服务器异常！");
           }
         });
     },
@@ -124,6 +118,8 @@ export default {
           if (res.code === "A0000") {
             this.tableData = res.data.studentBaseInfoFuzzy;
             this.total = res.data.total;
+          } else if (res.code === "A0004") {
+            this.$notify.error("服务器异常！");
           }
         });
     },
@@ -136,6 +132,18 @@ export default {
         address: "",
       };
       this.load();
+    },
+    toStudentOrder(data) {
+      this.$router.push({
+        path: "/studentOrder",
+        query: { studentId: data.studentId, studentName: data.name },
+      });
+    },
+    toStudentCollect(data) {
+      this.$router.push({
+        path: "/studentCollect",
+        query: { studentId: data.studentId, studentName: data.name },
+      });
     },
     handleCurrentChange(pageNum) {
       //点击分页按钮触发分页
