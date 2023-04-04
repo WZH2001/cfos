@@ -30,7 +30,7 @@
             <i class="el-icon-star-on"></i>
             <span>我的收藏</span>
           </el-menu-item>
-          <el-menu-item index="/previousOrder">
+          <el-menu-item index="/previousStudentOrder">
             <i class="el-icon-video-camera"></i>
             <span>往期订单</span>
           </el-menu-item>

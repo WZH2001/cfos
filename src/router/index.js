@@ -51,8 +51,8 @@ const routes = [
         name: 'myCollection',
         component: () => import('../views/student/MyCollection.vue')
       },{
-        path: '/previousOrder',
-        name: 'previousOrder',
+        path: '/previousStudentOrder',
+        name: 'previousStudentOrder',
         component: () => import('../views/student/PreviousOrder.vue')
       },
     ]
@@ -100,7 +100,22 @@ const routes = [
         path: '/sender',
         name: 'sender',
         component: () => import('../views/seller/Sender.vue')
-      }
+      },
+      {
+        path: '/previousSellerFood',
+        name: 'previousSellerFood',
+        component: () => import('../views/seller/PreviousFood.vue')
+      },
+      {
+        path: '/previousSellerOrder',
+        name: 'previousSellerOrder',
+        component: () => import('../views/seller/PreviousOrder.vue')
+      },
+      {
+        path: '/previousSellerSender',
+        name: 'previousSellerSender',
+        component: () => import('../views/seller/PreviousSender.vue')
+      },
     ]
   },
    //管理员主页

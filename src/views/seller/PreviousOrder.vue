@@ -17,14 +17,24 @@
     <el-table
       :data="tableData"
       stripe
-      size="small"
+      size="mini"
       @selection-change="handleSelectionChange"
-      class="student-previousOrder-table"
+      class="seller-previousOrder-table"
     >
       <el-table-column
         align="center"
         type="selection"
         width="55"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="studentName"
+        label="学生姓名"
+      ></el-table-column
+      ><el-table-column
+        align="center"
+        prop="studentAddress"
+        label="学生地址"
       ></el-table-column>
       <el-table-column
         align="center"
@@ -35,21 +45,6 @@
         align="center"
         prop="foodPrice"
         label="菜品价格"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="windowName"
-        label="窗口名称"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="principalTelephone"
-        label="窗口电话"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="windowAddress"
-        label="窗口地址"
       ></el-table-column>
       <el-table-column
         align="center"
@@ -64,22 +59,12 @@
       <el-table-column
         align="center"
         prop="sendTime"
-        label="配送时间"
+        label="送餐时间"
       ></el-table-column>
       <el-table-column
         align="center"
         prop="senderName"
         label="配送员"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="finishTime"
-        label="完成时间"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="orderNumber"
-        label="订单份数"
       ></el-table-column>
       <el-table-column align="center" label="删除">
         <template slot-scope="scope">
@@ -116,7 +101,7 @@
 <script>
 import request from "@/utils/Request";
 export default {
-  name: "PreviousOrder",
+  name: "PreviousSellerOrder",
   data() {
     return {
       tableData: [],
@@ -125,7 +110,7 @@ export default {
       orderIds: [],
       params: {
         pageNum: 1,
-        pageSize: 9,
+        pageSize: 13,
       },
     };
   },
@@ -135,7 +120,7 @@ export default {
   methods: {
     load() {
       request
-        .get("/previousOrder/previousOrderInfo", {
+        .get("/previous/previousOrderInfo", {
           params: this.params,
         })
         .then((res) => {
@@ -149,37 +134,10 @@ export default {
         });
     },
     deletePreviousOrder(orderId) {
-      if (this.foodIds == "") {
-        this.$notify.info("请选择要删除的订单！");
-      } else {
-        request
-          .post("/previousOrder/deletePreviousOrder", {
-            orderId: orderId,
-          })
-          .then((res) => {
-            if (res.code === "A0000") {
-              this.$notify.success("删除成功！");
-            } else if (res.code === "A0001") {
-              this.$notify.error("删除失败！");
-            } else if (res.code === "A0004") {
-              this.$notify.error("服务器异常！");
-            }
-            if (1 == this.currentNum) {
-              this.params.pageNum = 1;
-            }
-            this.load();
-          });
-      }
-    },
-    handleSelectionChange(selection) {
-      this.orderIds = [];
-      selection.forEach((element) => {
-        this.orderIds.push(element.orderId);
-      });
-    },
-    batchDeleteOrder() {
       request
-        .post("/previousOrder/batchDeletePreviousOrder", this.orderIds)
+        .post("/previous/deletePreviousOrder", {
+          orderId: orderId,
+        })
         .then((res) => {
           if (res.code === "A0000") {
             this.$notify.success("删除成功！");
@@ -188,11 +146,38 @@ export default {
           } else if (res.code === "A0004") {
             this.$notify.error("服务器异常！");
           }
-          if (this.orderIds.length == this.currentNum) {
+          if (1 == this.currentNum) {
             this.params.pageNum = 1;
           }
           this.load();
         });
+    },
+    handleSelectionChange(selection) {
+      this.orderIds = [];
+      selection.forEach((element) => {
+        this.orderIds.push(element.orderId);
+      });
+    },
+    batchDeleteOrder() {
+      if (this.orderIds == "") {
+        this.$notify.info("请选择要删除的菜品！");
+      } else {
+        request
+          .post("/previous/batchDeletePreviousOrder", this.orderIds)
+          .then((res) => {
+            if (res.code === "A0000") {
+              this.$notify.success("删除成功！");
+            } else if (res.code === "A0001") {
+              this.$notify.error("删除失败！");
+            } else if (res.code === "A0004") {
+              this.$notify.error("服务器异常！");
+            }
+            if (this.orderIds.length == this.currentNum) {
+              this.params.pageNum = 1;
+            }
+            this.load();
+          });
+      }
     },
     handleCurrentChange(pageNum) {
       this.params.pageNum = pageNum;
@@ -203,7 +188,7 @@ export default {
 </script>
 
 <style>
-.student-previousOrder-table {
+.seller-previousOrder-table {
   margin-top: 10px;
   width: 1285px;
 }

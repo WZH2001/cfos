@@ -1,7 +1,6 @@
 <template>
   <div>
     <el-container class="sellerLayoutOuterContainer">
-      <!-- <el-aside class="sellerLayoutAside" width="140px"> -->
       <div class="navigation">
         <el-menu
           :default-active="$route.path"
@@ -12,11 +11,11 @@
           style="min-height: 100%; overflow-x: hidden"
         >
           <!--首页-->
-          <el-menu-item index="sellerMain">
+          <el-menu-item index="/sellerMain">
             <i class="el-icon-s-home"></i>
             <span>首页</span>
           </el-menu-item>
-          <el-menu-item index="menu">
+          <el-menu-item index="/menu">
             <i class="el-icon-dish"></i>
             <span>菜单</span>
           </el-menu-item>
@@ -32,10 +31,25 @@
               <span>商家管理</span>
             </el-menu-item>
           </el-submenu>
-          <el-menu-item index="sender">
+          <el-menu-item index="/sender">
             <i class="el-icon-s-custom"></i>
             <span>配送员</span>
           </el-menu-item>
+          <el-submenu index="previous">
+            <template slot="title">
+              <i class="el-icon-video-camera"></i>
+              <span>往期</span>
+            </template>
+            <el-menu-item index="/previousSellerFood">
+              <span>往期菜品</span>
+            </el-menu-item>
+            <el-menu-item index="/previousSellerOrder">
+              <span>往期订单</span>
+            </el-menu-item>
+            <el-menu-item index="/previousSellerSender">
+              <span>往期配送员</span>
+            </el-menu-item>
+          </el-submenu>
         </el-menu>
       </div>
       <el-container>

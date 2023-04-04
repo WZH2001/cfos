@@ -2,7 +2,7 @@ import axios from 'axios'
 import Cookies from "js-cookie";
 
 const request = axios.create({
-    baseURL: 'http://192.168.1.9:9090',
+    baseURL: 'http://localhost:9090',
     timeout: 5000
 })
 

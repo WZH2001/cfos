@@ -31,7 +31,6 @@
           router
           class="el-menu-demo"
           background-color="#CCCCFF"
-          text-color="#fff"
           style="min-height: 100%; overflow-x: hidden"
         >
           <!--首页-->
@@ -46,11 +45,9 @@
               <span>用户管理</span>
             </template>
             <el-menu-item index="/studentBaseInfo">
-              <i class="el-icon-dish"></i>
               <span>学生管理</span>
             </el-menu-item>
             <el-menu-item index="/sellerBaseInfo">
-              <i class="el-icon-dish"></i>
               <span>商家管理</span>
             </el-menu-item>
           </el-submenu>
@@ -61,11 +58,9 @@
               <span>菜品管理</span>
             </template>
             <el-menu-item index="/menuBaseInfo">
-              <i class="el-icon-chicken"></i>
               <span>菜品查看</span>
             </el-menu-item>
             <el-menu-item index="/dishesRecommend">
-              <i class="el-icon-chicken"></i>
               <span>菜品推荐</span>
             </el-menu-item>
           </el-submenu>
@@ -156,9 +151,10 @@ export default {
   padding-right: 20px;
 }
 .navigation {
-  width: 180px;
+  width: 140px;
   min-height: calc(100vh - 60px);
   overflow: hidden;
   margin-right: 2px;
+  box-shadow: 2px 0 6px rgb(0 21 41 / 35%);
 }
 </style>
