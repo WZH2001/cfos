@@ -45,7 +45,7 @@
       <el-table-column
         align="center"
         prop="todaySell"
-        label="今日已卖"
+        label="今日销售"
       ></el-table-column>
     </el-table>
     <!--分页-->
