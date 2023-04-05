@@ -166,12 +166,84 @@ const routes = [
         name: 'sellerSender',
         component: () => import('../views/admin/userManage/SellerSender.vue')
       },
-      //菜品列表
+      //订单管理
+      {
+        path: '/orderBaseInfo',
+        name: 'orderBaseInfo',
+        component: () => import('../views/admin/orderManage/OrderBaseInfo.vue')
+      },
+      //未完成的订单信息
+      {
+        path: '/orderUnfinishedInfo',
+        name: 'orderUnfinishedInfo',
+        component: () => import('../views/admin/orderManage/OrderUnfinishedInfo.vue')
+      },
+       //收藏管理
+       {
+        path: '/collectionBaseInfo',
+        name: 'collectionBaseInfo',
+        component: () => import('../views/admin/collectionManage/CollectionBaseInfo.vue')
+      },
+      //最近收藏
+      {
+        path: '/recentCollectionInfo',
+        name: 'recentCollectionInfo',
+        component: () => import('../views/admin/collectionManage/RecentCollectionInfo.vue')
+      },
+      //菜品管理
       {
         path: '/menuBaseInfo',
         name: 'menuBaseInfo',
         component: () => import('../views/admin/menuManage/MenuBaseInfo.vue')
-      }
+      },
+      //已推荐菜品
+      {
+        path: '/menuHaveRecommend',
+        name: 'menuHaveRecommend',
+        component: () => import('../views/admin/menuManage/MenuHaveRecommend.vue')
+      },
+      //配送员管理
+      {
+        path: '/senderBaseInfo',
+        name: 'senderBaseInfo',
+        component: () => import('../views/admin/senderManage/SenderBaseInfo.vue')
+      },
+      //在职配送员信息
+      {
+        path: '/senderAtWorkInfo',
+        name: 'senderAtWorkInfo',
+        component: () => import('../views/admin/senderManage/SenderAtWorkInfo.vue')
+      },
+      //往期学生
+      {
+        path: '/pastStudent',
+        name: 'pastStudent',
+        component: () => import('../views/admin/previous/PreviousStudent.vue')
+      },
+      //往期商家
+      {
+        path: '/pastSeller',
+        name: 'pastSeller',
+        component: () => import('../views/admin/previous/PreviousSeller.vue')
+      },
+      //往期订单
+      {
+        path: '/pastOrder',
+        name: 'pastOrder',
+        component: () => import('../views/admin/previous/PreviousOrder.vue')
+      },
+      //往期菜品
+      {
+        path: '/pastDishes',
+        name: 'pastDishes',
+        component: () => import('../views/admin/previous/PreviousFood.vue')
+      },
+      //往期配送员
+      {
+        path: '/pastSender',
+        name: 'pastSender',
+        component: () => import('../views/admin/previous/PreviousSender.vue')
+      },
     ]
   },
   {

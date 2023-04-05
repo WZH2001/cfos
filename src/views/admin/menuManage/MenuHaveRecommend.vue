@@ -18,9 +18,12 @@
       <el-button style="margin-left: 5px" type="warning" @click="reset"
         ><i class="el-icon-refresh">重置</i></el-button
       >
-      <el-button style="margin-left: 5px" type="success" @click="haveRecommend"
-        >返回</el-button
-      >
+      <el-button
+        style="margin-left: 5px"
+        type="success"
+        @click="$router.push('/menuBaseInfo')"
+        >查看全部<i class="el-icon-more"></i
+      ></el-button>
     </div>
     <!--表格-->
     <el-table :data="tableData" stripe size="small">
@@ -73,7 +76,7 @@
 import request from "@/utils/Request";
 let flag = false;
 export default {
-  name: "MenuBaseInfo",
+  name: "MenuHaveRecommend",
   data() {
     return {
       tableData: [],
@@ -92,12 +95,12 @@ export default {
   methods: {
     load() {
       request
-        .get("/menu/menuBaseInfo", {
+        .get("/menu/menuHaveRecommend", {
           params: this.params,
         })
         .then((res) => {
           if (res.code === "A0000") {
-            this.tableData = res.data.menuBaseInfo;
+            this.tableData = res.data.menuHaveRecommend;
             this.total = res.data.total;
           } else if (res.code === "A0004") {
             this.$notify.error("服务器异常！");
@@ -111,12 +114,12 @@ export default {
     },
     fuzzyQuery() {
       request
-        .get("/menu/menuBaseInfoFuzzy", {
+        .get("/menu/menuHaveRecommendFuzzy", {
           params: this.params,
         })
         .then((res) => {
           if (res.code === "A0000") {
-            this.tableData = res.data.menuBaseInfoFuzzy;
+            this.tableData = res.data.menuHaveRecommendFuzzy;
             this.total = res.data.total;
           } else if (res.code === "A0004") {
             this.$notify.error("服务器异常！");
@@ -131,9 +134,6 @@ export default {
         foodPrice: "",
       };
       this.load();
-    },
-    haveRecommend() {
-      this.$router.push("/menuHaveRecommend");
     },
     handleCurrentChange(pageNum) {
       //点击分页按钮触发分页

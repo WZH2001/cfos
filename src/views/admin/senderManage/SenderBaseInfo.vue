@@ -4,13 +4,13 @@
     <div style="margin-bottom: 20px">
       <el-input
         style="width: 240px"
-        placeholder="请输菜品名"
-        v-model="params.foodName"
+        placeholder="请输窗口名"
+        v-model="params.windowName"
       ></el-input>
       <el-input
         style="width: 240px; margin-left: 5px"
-        placeholder="请输入菜品价格"
-        v-model="params.foodPrice"
+        placeholder="请输入配送员姓名"
+        v-model="params.senderName"
       ></el-input>
       <el-button style="margin-left: 5px" type="primary" @click="fuzzyQueryOne"
         ><i class="el-icon-search">搜索</i></el-button
@@ -18,7 +18,10 @@
       <el-button style="margin-left: 5px" type="warning" @click="reset"
         ><i class="el-icon-refresh">重置</i></el-button
       >
-      <el-button style="margin-left: 5px" type="success" @click="haveRecommend"
+      <el-button
+        style="margin-left: 5px"
+        type="success"
+        @click="$router.push('/senderAtWorkInfo')"
         >返回</el-button
       >
     </div>
@@ -26,33 +29,38 @@
     <el-table :data="tableData" stripe size="small">
       <el-table-column
         align="center"
-        prop="foodName"
-        label="菜品名称"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="foodPrice"
-        label="菜品价格"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="createTime"
-        label="添加时间"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="isRecommend"
-        label="是否推荐"
-      ></el-table-column>
-      <el-table-column
-        align="center"
         prop="windowName"
-        label="所属窗口"
+        label="窗口名"
       ></el-table-column>
       <el-table-column
         align="center"
-        prop="todaySell"
-        label="今日销售"
+        prop="windowAddress"
+        label="地址"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="senderName"
+        label="配送员姓名"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="senderTelephone"
+        label="联系方式"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="workDate"
+        label="入职时间"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="quitDate"
+        label="离职时间"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="sendNumber"
+        label="今日配送单数"
       ></el-table-column>
     </el-table>
     <!--分页-->
@@ -73,16 +81,16 @@
 import request from "@/utils/Request";
 let flag = false;
 export default {
-  name: "MenuBaseInfo",
+  name: "SenderBaseInfo",
   data() {
     return {
       tableData: [],
       total: 0,
       params: {
+        windowName: "",
+        senderName: "",
         pageNum: 1,
         pageSize: 15,
-        foodName: "",
-        foodPrice: "",
       },
     };
   },
@@ -92,12 +100,12 @@ export default {
   methods: {
     load() {
       request
-        .get("/menu/menuBaseInfo", {
+        .get("/sender/senderBaseInfo", {
           params: this.params,
         })
         .then((res) => {
           if (res.code === "A0000") {
-            this.tableData = res.data.menuBaseInfo;
+            this.tableData = res.data.senderBaseInfo;
             this.total = res.data.total;
           } else if (res.code === "A0004") {
             this.$notify.error("服务器异常！");
@@ -111,12 +119,12 @@ export default {
     },
     fuzzyQuery() {
       request
-        .get("/menu/menuBaseInfoFuzzy", {
+        .get("/sender/senderBaseInfoFuzzy", {
           params: this.params,
         })
         .then((res) => {
           if (res.code === "A0000") {
-            this.tableData = res.data.menuBaseInfoFuzzy;
+            this.tableData = res.data.senderBaseInfoFuzzy;
             this.total = res.data.total;
           } else if (res.code === "A0004") {
             this.$notify.error("服务器异常！");
@@ -127,16 +135,12 @@ export default {
       this.params = {
         pageNum: 1,
         pageSize: 15,
-        foodName: "",
-        foodPrice: "",
+        windowName: "",
+        senderName: "",
       };
       this.load();
     },
-    haveRecommend() {
-      this.$router.push("/menuHaveRecommend");
-    },
     handleCurrentChange(pageNum) {
-      //点击分页按钮触发分页
       this.params.pageNum = pageNum;
       if (flag == false) {
         this.load();
