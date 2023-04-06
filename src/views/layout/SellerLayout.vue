@@ -112,13 +112,13 @@ export default {
 
 .sellerLayoutHead {
   float: left;
-  margin-left: 2px;
   position: relative;
   top: 0px;
   height: 80px;
   width: 100%;
   background-image: url(@/assets/head.png);
   margin-bottom: 2px;
+  box-shadow: 2px 0 6px rgb(0 21 41 / 35%);
 }
 
 .sellerLayoutLeft {

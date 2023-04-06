@@ -57,11 +57,6 @@
         prop="quitDate"
         label="离职时间"
       ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="sendNumber"
-        label="今日配送单数"
-      ></el-table-column>
     </el-table>
     <!--分页-->
     <div style="margin-top: 20px">

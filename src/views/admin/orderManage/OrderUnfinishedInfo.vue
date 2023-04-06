@@ -32,7 +32,7 @@
         style="margin-left: 5px"
         type="success"
         @click="$router.push('/orderBaseInfo')"
-        >查看全部<i class="el-icon-more"></i
+        >查看完成<i class="el-icon-more"></i
       ></el-button>
     </div>
     <!--表格-->

@@ -96,7 +96,7 @@
         </el-menu>
       </div>
       <!--主体数据-->
-      <div style="flex: 1; padding: 5px">
+      <div class="main">
         <router-view />
       </div>
     </div>
@@ -129,6 +129,7 @@ export default {
   line-height: 60px;
   background-image: url(@/assets/head.png);
   display: flex;
+  box-shadow: 2px 0 6px rgb(0 21 41 / 35%);
 }
 .img {
   width: 40px;
@@ -139,6 +140,8 @@ export default {
 .span {
   margin-left: 25px;
   font-size: 24px;
+  font-weight: 800;
+  color: orange;
 }
 .right {
   flex: 1;
@@ -147,9 +150,14 @@ export default {
 }
 .navigation {
   width: 140px;
-  min-height: calc(100vh - 60px);
+  min-height: calc(100vh - 62px);
   overflow: hidden;
   margin-right: 2px;
+  margin-top: 2px;
   box-shadow: 2px 0 6px rgb(0 21 41 / 35%);
+}
+.main {
+  flex: 1;
+  padding: 5px;
 }
 </style>

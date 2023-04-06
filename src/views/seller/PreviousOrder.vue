@@ -17,7 +17,7 @@
     <el-table
       :data="tableData"
       stripe
-      size="mini"
+      size="small"
       @selection-change="handleSelectionChange"
       class="seller-previousOrder-table"
     >
@@ -110,7 +110,7 @@ export default {
       orderIds: [],
       params: {
         pageNum: 1,
-        pageSize: 13,
+        pageSize: 9,
       },
     };
   },

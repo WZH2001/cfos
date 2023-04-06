@@ -22,7 +22,7 @@
         style="margin-left: 5px"
         type="success"
         @click="$router.push('/senderBaseInfo')"
-        >查看全部<i class="el-icon-more"></i
+        >查看离职<i class="el-icon-more"></i
       ></el-button>
     </div>
     <!--表格-->
@@ -51,11 +51,6 @@
         align="center"
         prop="workDate"
         label="入职时间"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="quitDate"
-        label="离职时间"
       ></el-table-column>
       <el-table-column
         align="center"
@@ -100,12 +95,12 @@ export default {
   methods: {
     load() {
       request
-        .get("/sender/SenderAtWorkInfo", {
+        .get("/sender/senderAtWorkInfo", {
           params: this.params,
         })
         .then((res) => {
           if (res.code === "A0000") {
-            this.tableData = res.data.SenderAtWorkInfo;
+            this.tableData = res.data.senderAtWorkInfo;
             this.total = res.data.total;
           } else if (res.code === "A0004") {
             this.$notify.error("服务器异常！");
@@ -119,12 +114,12 @@ export default {
     },
     fuzzyQuery() {
       request
-        .get("/sender/SenderAtWorkInfoFuzzy", {
+        .get("/sender/senderAtWorkInfoFuzzy", {
           params: this.params,
         })
         .then((res) => {
           if (res.code === "A0000") {
-            this.tableData = res.data.SenderAtWorkInfoFuzzy;
+            this.tableData = res.data.senderAtWorkInfoFuzzy;
             this.total = res.data.total;
           } else if (res.code === "A0004") {
             this.$notify.error("服务器异常！");

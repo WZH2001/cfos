@@ -36,7 +36,7 @@
       >
     </div>
     <!--表格-->
-    <el-table :data="tableData" stripe size="small">
+    <el-table :data="tableData" stripe size="mini">
       <el-table-column
         align="center"
         prop="studentName"
@@ -122,7 +122,7 @@ export default {
         foodName: "",
         foodPrice: "",
         pageNum: 1,
-        pageSize: 15,
+        pageSize: 10,
       },
     };
   },
@@ -166,7 +166,7 @@ export default {
     reset() {
       this.params = {
         pageNum: 1,
-        pageSize: 15,
+        pageSize: 10,
         studentName: "",
         windowName: "",
         foodName: "",

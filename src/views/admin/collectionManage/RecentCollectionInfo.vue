@@ -112,12 +112,12 @@ export default {
   methods: {
     load() {
       request
-        .get("/collection/RecentCollectionInfo", {
+        .get("/collection/recentCollectionInfo", {
           params: this.params,
         })
         .then((res) => {
           if (res.code === "A0000") {
-            this.tableData = res.data.RecentCollectionInfo;
+            this.tableData = res.data.recentCollectionInfo;
             this.total = res.data.total;
           } else if (res.code === "A0004") {
             this.$notify.error("服务器异常！");
@@ -131,12 +131,12 @@ export default {
     },
     fuzzyQuery() {
       request
-        .get("/collection/RecentCollectionInfoFuzzy", {
+        .get("/collection/recentCollectionInfoFuzzy", {
           params: this.params,
         })
         .then((res) => {
           if (res.code === "A0000") {
-            this.tableData = res.data.RecentCollectionInfoFuzzy;
+            this.tableData = res.data.recentCollectionInfoFuzzy;
             this.total = res.data.total;
           } else if (res.code === "A0004") {
             this.$notify.error("服务器异常！");
