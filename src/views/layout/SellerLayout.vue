@@ -28,7 +28,7 @@
               <span>自取餐订单</span>
             </el-menu-item>
             <el-menu-item index="/sendOrderUnfinished">
-              <span>商家管理</span>
+              <span>商家配送订单</span>
             </el-menu-item>
           </el-submenu>
           <el-menu-item index="/sender">

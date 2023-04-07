@@ -24,6 +24,8 @@
       stripe
       size="medium"
       class="student-order-table"
+      border="2"
+      :header-cell-style="{ background: '#F5F6FA', color: '#666E92' }"
       @selection-change="handleSelectionChange"
     >
       <el-table-column
@@ -405,7 +407,7 @@ export default {
     batchCollect() {
       if (this.foodIds != "") {
         if (this.foodIdsNotCollected == "") {
-          this.$notify.info("当前选择全已收藏！");
+          this.$notify.info("当前选择已收藏！");
           this.load();
         } else {
           request

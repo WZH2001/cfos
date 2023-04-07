@@ -37,8 +37,8 @@
     </div>
     <div>
       <div style="margin-bottom: 20px">
-        <el-button type="warning" @click="$router.push('/sellerYearIncomeInfo')"
-          >查看年度销量</el-button
+        <el-button type="success" @click="$router.push('/sellerMain')"
+          >返回</el-button
         >
       </div>
       <div id="main" style="width: 1280px; height: 530px"></div>
@@ -49,7 +49,7 @@
 <script>
 import * as echarts from "echarts";
 export default {
-  name: "SellerMain",
+  name: "SellerYearIncomInfo",
   data() {
     return {};
   },
@@ -86,8 +86,14 @@ export default {
       ],
       series: [
         {
-          name: "Direct",
+          name: "Direct1",
           type: "bar",
+          barWidth: "60%",
+          data: [10, 52, 200, 334, 390, 330, 220],
+        },
+        {
+          name: "Direct2",
+          type: "line",
           barWidth: "60%",
           data: [10, 52, 200, 334, 390, 330, 220],
         },

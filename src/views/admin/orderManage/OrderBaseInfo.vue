@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="search">
     <!--搜索表单-->
-    <div style="margin-bottom: 20px">
+    <div style="margin-bottom: 15px">
       <el-input
         style="width: 240px"
         placeholder="请输入学生姓名"
@@ -36,7 +36,13 @@
       >
     </div>
     <!--表格-->
-    <el-table :data="tableData" stripe size="mini">
+    <el-table
+      :data="tableData"
+      stripe
+      size="mini"
+      border="2"
+      :header-cell-style="{ background: '#F5F6FA', color: '#666E92' }"
+    >
       <el-table-column
         align="center"
         prop="studentName"
@@ -185,3 +191,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.search {
+  margin-top: 5px;
+  padding: 5px;
+}
+</style>

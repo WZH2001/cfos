@@ -2,7 +2,7 @@
   <div>
     <div>
       <el-button
-        style="margin-left: 10px"
+        style="margin-left: 5px; margin-top: 5px"
         type="primary"
         @click="showFinishedOrder"
         >已完成订单</el-button
@@ -13,6 +13,8 @@
       :data="tableData"
       stripe
       size="mini"
+      border="2"
+      :header-cell-style="{ background: '#F5F6FA', color: '#666E92' }"
       class="seller-sendOrder-table"
     >
       <el-table-column
@@ -80,6 +82,7 @@
           height="250"
           style="width: 100%"
           highlight-current-row
+          border="1"
           @row-click="selectThisSender"
         >
           <el-table-column align="center" prop="senderName" label="姓名">

@@ -1,18 +1,35 @@
 <template>
   <div>
     <div>
-      <span style="text-align: center; display: block"
+      <span
+        style="
+          text-align: center;
+          display: block;
+          color: brown;
+          font-size: larger;
+          font-weight: bold;
+          margin-top: 10px;
+        "
         >窗口名称：{{ windowName }}</span
       >
-      <el-button
-        style="margin-left: 10px"
-        type="primary"
-        @click="returnSellerBaseInfo"
-        >返回</el-button
-      >
+      <div style="position: absolute; top: 70px">
+        <el-button
+          style="margin-left: 5px"
+          type="primary"
+          @click="returnSellerBaseInfo"
+          >返回</el-button
+        >
+      </div>
     </div>
     <!--表格-->
-    <el-table :data="tableData" stripe size="medium">
+    <el-table
+      :data="tableData"
+      stripe
+      size="medium"
+      border="2"
+      style="margin-top: 15px"
+      :header-cell-style="{ background: '#F5F6FA', color: '#666E92' }"
+    >
       <el-table-column
         align="center"
         prop="foodName"

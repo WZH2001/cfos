@@ -49,6 +49,8 @@
       stripe
       size="small"
       @selection-change="handleSelectionChange"
+      border="2"
+      :header-cell-style="{ background: '#F5F6FA', color: '#666E92' }"
       class="seller-menu-table"
     >
       <el-table-column
@@ -153,10 +155,11 @@
           <el-radio v-model="isRecommend" :label="1">是</el-radio>
           <el-radio v-model="isRecommend" :label="0">否</el-radio>
         </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
         <el-button @click="addVisible = false">取 消</el-button>
         <el-button type="primary" @click="save">确 定</el-button>
-      </el-form>
-      <div slot="footer" class="dialog-footer"></div>
+      </div>
     </el-dialog>
     <!--编辑表单-->
     <el-dialog title="菜品信息" :visible.sync="editVisible" width="30%">
@@ -198,10 +201,11 @@
             >否</el-radio
           >
         </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
         <el-button @click="editVisible = false">取 消</el-button>
         <el-button type="primary" @click="edit">确 定</el-button>
-      </el-form>
-      <div slot="footer" class="dialog-footer"></div>
+      </div>
     </el-dialog>
     <!--描述-->
     <el-dialog title="菜品描述" :visible.sync="descriptionVisible" width="30%">
@@ -418,19 +422,23 @@ export default {
       });
     },
     batchDel() {
-      request.post("/sellerMenu/batchDelete", this.foodIds).then((res) => {
-        if (res.code === "A0000") {
-          this.$notify.success("删除成功！");
-        } else if (res.code === "A0001") {
-          this.$notify.error("删除失败！");
-        } else if (res.code === "A0004") {
-          this.$notify.error("服务器异常！");
-        }
-        if (this.foodIds.length == this.currentNum) {
-          this.params.pageNum = 1;
-        }
-        this.fuzzyQuery();
-      });
+      if (this.foodIds == "") {
+        this.$notify.info("请选择要删除的菜品！");
+      } else {
+        request.post("/sellerMenu/batchDelete", this.foodIds).then((res) => {
+          if (res.code === "A0000") {
+            this.$notify.success("删除成功！");
+          } else if (res.code === "A0001") {
+            this.$notify.error("删除失败！");
+          } else if (res.code === "A0004") {
+            this.$notify.error("服务器异常！");
+          }
+          if (this.foodIds.length == this.currentNum) {
+            this.params.pageNum = 1;
+          }
+          this.fuzzyQuery();
+        });
+      }
     },
     menuDescription(description) {
       this.descriptionVisible = true;

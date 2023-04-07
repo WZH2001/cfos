@@ -69,6 +69,11 @@ const routes = [
         name: 'sellerMain',
         component: () => import('../views/home/SellerMain.vue')
       },
+      {
+        path: '/sellerYearIncomeInfo',
+        name: 'sellerYearIncomeInfo',
+        component: () => import('../views/home/SellerYearIncomeInfo.vue')
+      },
         //菜单
       {
         path: '/menu',

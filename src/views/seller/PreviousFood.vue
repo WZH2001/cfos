@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="margin-top: 5px; margin-left: 5px">
     <el-button type="success" slot="reference" @click="batchRecoverFood"
       ><i class="el-icon-upload2"></i>恢复菜品</el-button
     >
@@ -21,6 +21,8 @@
       :data="tableData"
       stripe
       size="mini"
+      border="2"
+      :header-cell-style="{ background: '#F5F6FA', color: '#666E92' }"
       @selection-change="handleSelectionChange"
       class="seller-previousFood-table"
     >
@@ -225,6 +227,6 @@ export default {
 <style>
 .seller-previousFood-table {
   margin-top: 10px;
-  width: 1285px;
+  width: 1280px;
 }
 </style>

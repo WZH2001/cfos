@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="search">
     <!--搜索表单-->
-    <div style="margin-bottom: 20px">
+    <div style="margin-bottom: 15px">
       <el-input
         style="width: 240px"
         placeholder="请输菜品名"
@@ -26,7 +26,13 @@
       ></el-button>
     </div>
     <!--表格-->
-    <el-table :data="tableData" stripe size="small">
+    <el-table
+      :data="tableData"
+      stripe
+      size="small"
+      border="2"
+      :header-cell-style="{ background: '#F5F6FA', color: '#666E92' }"
+    >
       <el-table-column
         align="center"
         prop="foodName"
@@ -59,7 +65,7 @@
       ></el-table-column>
     </el-table>
     <!--分页-->
-    <div style="margin-top: 20px">
+    <div style="margin-top: 9px">
       <el-pagination
         background
         :current-page="params.pageNum"
@@ -147,3 +153,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.search {
+  margin-top: 5px;
+  padding: 5px;
+}
+</style>

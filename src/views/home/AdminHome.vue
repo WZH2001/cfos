@@ -1,10 +1,8 @@
-<template>
-  <h1>这是主页</h1>
-</template>
+<template></template>
 
 <script>
 export default {
-  name: "Home",
+  name: "AdminHome",
   data() {
     return {};
   },

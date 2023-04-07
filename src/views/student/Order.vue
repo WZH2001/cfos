@@ -31,13 +31,15 @@
       >
     </div>
     <!--表格-->
-    <div style="">
+    <div>
       <el-table
         :data="tableData"
         stripe
         size="medium"
         @selection-change="handleSelectionChange"
         class="student-order-table"
+        border="2"
+        :header-cell-style="{ background: '#F5F6FA', color: '#666E92' }"
       >
         <el-table-column
           align="center"
@@ -105,13 +107,14 @@
       >
         <el-form :model="get" :rules="getTimeRules" ref="getTime">
           <el-form-item prop="getTime" label="取餐时间：">
-            <el-date-picker
+            <el-time-picker
               v-model="get.getTime"
-              type="datetime"
               value-format="yyyy-MM-dd HH:mm:ss"
-              :picker-options="pickerOptions"
+              :picker-options="{
+                selectableRange: '6:00:00 - 21:00:00',
+              }"
             >
-            </el-date-picker>
+            </el-time-picker>
           </el-form-item>
           <el-form-item>
             <label slot="label">&nbsp;&nbsp;订餐份数：</label>
@@ -131,13 +134,14 @@
       >
         <el-form :model="send" :rules="sendTimeRules" ref="sendTime">
           <el-form-item prop="sendTime" label="配送时间：">
-            <el-date-picker
+            <el-time-picker
               v-model="send.sendTime"
-              type="datetime"
               value-format="yyyy-MM-dd HH:mm:ss"
-              :picker-options="pickerOptions"
+              :picker-options="{
+                selectableRange: '6:00:00 - 21:00:00',
+              }"
             >
-            </el-date-picker>
+            </el-time-picker>
           </el-form-item>
           <el-form-item>
             <label slot="label">&nbsp;&nbsp;订餐份数：</label>
@@ -175,13 +179,14 @@
         style="margin-top: 20px"
       >
         <el-form-item prop="multiGetTime" label="取餐时间：">
-          <el-date-picker
+          <el-time-picker
             v-model="multiGet.multiGetTime"
-            type="datetime"
             value-format="yyyy-MM-dd HH:mm:ss"
-            :picker-options="pickerOptions"
+            :picker-options="{
+              selectableRange: '6:00:00 - 21:00:00',
+            }"
           >
-          </el-date-picker>
+          </el-time-picker>
         </el-form-item>
       </el-form>
       <el-form
@@ -192,13 +197,14 @@
         style="margin-top: 20px"
       >
         <el-form-item prop="multiSendTime" label="配送时间：">
-          <el-date-picker
+          <el-time-picker
             v-model="multiSend.multiSendTime"
-            type="datetime"
             value-format="yyyy-MM-dd HH:mm:ss"
-            :picker-options="pickerOptions"
+            :picker-options="{
+              selectableRange: '6:00:00 - 21:00:00',
+            }"
           >
-          </el-date-picker>
+          </el-time-picker>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">

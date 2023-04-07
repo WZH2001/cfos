@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--搜索表单-->
-    <div style="margin-bottom: 20px">
+    <div class="search">
       <el-input
         style="width: 240px"
         placeholder="请输入用户名"
@@ -25,7 +25,13 @@
       >
     </div>
     <!--表格-->
-    <el-table :data="tableData" stripe size="medium">
+    <el-table
+      :data="tableData"
+      stripe
+      size="medium"
+      border="2"
+      :header-cell-style="{ background: '#F5F6FA', color: '#666E92' }"
+    >
       <el-table-column
         align="center"
         prop="username"
@@ -165,3 +171,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.search {
+  margin-top: 5px;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+</style>

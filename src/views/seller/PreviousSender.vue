@@ -1,12 +1,11 @@
 <template>
-  <div>
+  <div style="margin-top: 5px; margin-left: 5px">
     <el-popconfirm
       confirm-button-text="确定"
       cancel-button-text="我再想想"
       icon="el-icon-info"
       icon-color="red"
       title="您确定删除吗？"
-      style="margin-left: 5px"
       @confirm="batchDeleteSender"
     >
       <el-button type="danger" slot="reference"
@@ -18,6 +17,8 @@
       :data="tableData"
       stripe
       size="mini"
+      border="2"
+      :header-cell-style="{ background: '#F5F6FA', color: '#666E92' }"
       @selection-change="handleSelectionChange"
       class="seller-previousSender-table"
     >
@@ -140,7 +141,7 @@ export default {
     },
     batchDeleteSender() {
       if (this.senderIds == "") {
-        this.$notify.info("请选择要删除的菜品！");
+        this.$notify.info("请选择要删除的配送员！");
       } else {
         request
           .post("/previous/batchDeletePreviousSender", this.senderIds)
@@ -170,6 +171,6 @@ export default {
 <style>
 .seller-previousSender-table {
   margin-top: 10px;
-  width: 1285px;
+  width: 1280px;
 }
 </style>

@@ -1,12 +1,11 @@
 <template>
-  <div>
+  <div style="margin-top: 5px; margin-left: 5px">
     <el-popconfirm
       confirm-button-text="确定"
       cancel-button-text="我再想想"
       icon="el-icon-info"
       icon-color="red"
       title="您确定删除吗？"
-      style="margin-left: 5px"
       @confirm="batchDeleteOrder"
     >
       <el-button type="danger" slot="reference"
@@ -18,6 +17,8 @@
       :data="tableData"
       stripe
       size="small"
+      border="2"
+      :header-cell-style="{ background: '#F5F6FA', color: '#666E92' }"
       @selection-change="handleSelectionChange"
       class="seller-previousOrder-table"
     >
@@ -190,6 +191,6 @@ export default {
 <style>
 .seller-previousOrder-table {
   margin-top: 10px;
-  width: 1285px;
+  width: 1280px;
 }
 </style>

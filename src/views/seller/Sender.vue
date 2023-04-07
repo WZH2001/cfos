@@ -17,6 +17,8 @@
       :data="tableData"
       stripe
       size="medium"
+      border="2"
+      :header-cell-style="{ background: '#F5F6FA', color: '#666E92' }"
       class="seller-sender-table"
     >
       <el-table-column
@@ -96,10 +98,11 @@
             maxlength="11"
           ></el-input>
         </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
         <el-button @click="addVisible = false">取 消</el-button>
         <el-button type="primary" @click="save">确 定</el-button>
-      </el-form>
-      <div slot="footer" class="dialog-footer"></div>
+      </div>
     </el-dialog>
     <!--编辑表单-->
     <el-dialog title="配送员信息" :visible.sync="editVisible" width="30%">
@@ -123,10 +126,11 @@
             maxlength="11"
           ></el-input>
         </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
         <el-button @click="editVisible = false">取 消</el-button>
         <el-button type="primary" @click="edit">确 定</el-button>
-      </el-form>
-      <div slot="footer" class="dialog-footer"></div>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -293,7 +297,6 @@ export default {
 <style>
 .seller-sender-search {
   margin-top: 5px;
-  padding: 5px;
   margin-bottom: 10px;
 }
 

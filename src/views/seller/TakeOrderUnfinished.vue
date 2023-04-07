@@ -2,7 +2,7 @@
   <div>
     <div>
       <el-button
-        style="margin-left: 10px"
+        style="margin-left: 5px; margin-top: 5px"
         type="primary"
         @click="showFinishedOrder"
         >已完成订单</el-button
@@ -14,6 +14,8 @@
         :data="tableData"
         stripe
         size="mini"
+        border="2"
+        :header-cell-style="{ background: '#F5F6FA', color: '#666E92' }"
         class="seller-todayOrder-table"
       >
         <el-table-column
