@@ -33,7 +33,7 @@
       stripe
       size="medium"
       @selection-change="handleSelectionChange"
-      border="2"
+      border
       :header-cell-style="{ background: '#F5F6FA', color: '#666E92' }"
       class="student-collect-table"
     >

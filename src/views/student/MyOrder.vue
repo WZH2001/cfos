@@ -24,7 +24,7 @@
       stripe
       size="medium"
       class="student-order-table"
-      border="2"
+      border
       :header-cell-style="{ background: '#F5F6FA', color: '#666E92' }"
       @selection-change="handleSelectionChange"
     >

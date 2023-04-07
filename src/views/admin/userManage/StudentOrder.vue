@@ -27,7 +27,7 @@
       stripe
       size="small"
       style="margin-top: 15px"
-      border="2"
+      border
       :header-cell-style="{ background: '#F5F6FA', color: '#666E92' }"
     >
       <el-table-column

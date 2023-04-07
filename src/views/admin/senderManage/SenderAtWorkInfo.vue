@@ -30,7 +30,7 @@
       :data="tableData"
       stripe
       size="small"
-      border="2"
+      border
       :header-cell-style="{ background: '#F5F6FA', color: '#666E92' }"
     >
       <el-table-column

@@ -26,7 +26,7 @@
       :data="tableData"
       stripe
       size="medium"
-      border="2"
+      border
       style="margin-top: 15px"
       :header-cell-style="{ background: '#F5F6FA', color: '#666E92' }"
     >

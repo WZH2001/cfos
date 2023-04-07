@@ -13,7 +13,7 @@
       :data="tableData"
       stripe
       size="mini"
-      border="2"
+      border
       :header-cell-style="{ background: '#F5F6FA', color: '#666E92' }"
       class="seller-sendOrder-table"
     >
