@@ -59,7 +59,10 @@
       ></el-table-column>
       <el-table-column align="center" label="查看详情">
         <template v-slot="table">
-          <el-button type="success" @click="toSellerMenu(table.row)"
+          <el-button
+            type="success"
+            @click="toSellerMenu(table.row)"
+            style="margin-right: -5px"
             >菜单<i class="el-icon-more"></i
           ></el-button>
           <el-button type="success" @click="toSellerSender(table.row)"

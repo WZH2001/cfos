@@ -66,7 +66,24 @@
               </span>
               <el-dropdown-menu slot="dropdown" style="margin-top: -15px">
                 <el-dropdown-item>
-                  <div @click="logout"><i class="el-icon-close"></i>退出</div>
+                  <div @click="logout">
+                    <i class="el-icon-plus"></i>完善信息
+                  </div>
+                </el-dropdown-item>
+                <el-dropdown-item>
+                  <div @click="logout">
+                    <i class="el-icon-edit"></i>修改信息
+                  </div>
+                </el-dropdown-item>
+                <el-dropdown-item>
+                  <div @click="logout">
+                    <i class="el-icon-close"></i>退出系统
+                  </div>
+                </el-dropdown-item>
+                <el-dropdown-item>
+                  <div @click="logout">
+                    <i class="el-icon-circle-close"></i>注销账户
+                  </div>
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>

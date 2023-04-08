@@ -126,7 +126,7 @@
               v-model="get.getTime"
               value-format="yyyy-MM-dd HH:mm:ss"
               :picker-options="{
-                selectableRange: '6:00:00 - 21:00:00',
+                selectableRange: range,
               }"
             >
             </el-time-picker>
@@ -153,7 +153,7 @@
               v-model="send.sendTime"
               value-format="yyyy-MM-dd HH:mm:ss"
               :picker-options="{
-                selectableRange: '6:00:00 - 21:00:00',
+                selectableRange: range,
               }"
             >
             </el-time-picker>
@@ -198,7 +198,7 @@
             v-model="multiGet.multiGetTime"
             value-format="yyyy-MM-dd HH:mm:ss"
             :picker-options="{
-              selectableRange: '6:00:00 - 21:00:00',
+              selectableRange: range,
             }"
           >
           </el-time-picker>
@@ -216,7 +216,7 @@
             v-model="multiSend.multiSendTime"
             value-format="yyyy-MM-dd HH:mm:ss"
             :picker-options="{
-              selectableRange: '6:00:00 - 21:00:00',
+              selectableRange: range,
             }"
           >
           </el-time-picker>
@@ -283,20 +283,7 @@ export default {
         foodPrice: "",
         windowName: "",
       },
-      pickerOptions: {
-        disabledDate(time) {
-          const date = new Date();
-          const oneday = date.getTime();
-          return time.getTime() < new Date().getTime() - 86400000;
-        },
-        selectableRange: (() => {
-          let data = new Date();
-          let hour = data.getHours();
-          let minute = data.getMinutes();
-          let second = data.getSeconds();
-          return [`${hour}:${minute}:${second} - 23:59:59`];
-        })(),
-      },
+      range: "6:00:00 - 21:00:00",
       getTimeRules: {
         getTime: [
           { required: true, message: "请输入取餐时间", trigger: "blur" },
@@ -321,6 +308,15 @@ export default {
   },
   created() {
     this.load();
+  },
+  mounted() {
+    let data = new Date();
+    let hour = data.getHours();
+    let minute = data.getMinutes();
+    let second = data.getSeconds();
+    if (hour >= 6) {
+      this.range = hour + ":" + minute + ":" + second + "- 21:00:00";
+    }
   },
   methods: {
     load() {
@@ -489,9 +485,9 @@ export default {
     },
     preMultipleOrder() {
       if (this.multiOrderTableData == 0) {
-        this.$notify.info("你还没选择菜品！");
+        this.$notify.info("请选择菜品！");
       } else if (this.multiOrderTableData.length > 5) {
-        this.$notify.info("选择菜品不能超过五样！");
+        this.$notify.info("最多只能选择五样！");
       } else {
         this.multiOrderVisible = true;
       }

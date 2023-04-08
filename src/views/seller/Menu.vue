@@ -408,6 +408,10 @@ export default {
             this.$notify.error("删除失败！");
           } else if (res.code === "A0004") {
             this.$notify.error("服务器异常！");
+          } else if (res.code === "A0002") {
+            this.$notify.error(
+              "该菜品在今日已有订单，无法删除！建议在每天晚上九点后到次日早上五点前执行删除操作"
+            );
           }
           if (1 == this.currentNum) {
             this.params.pageNum = 1;
@@ -427,11 +431,17 @@ export default {
       } else {
         request.post("/sellerMenu/batchDelete", this.foodIds).then((res) => {
           if (res.code === "A0000") {
-            this.$notify.success("删除成功！");
+            this.$notify.success(
+              "成功删除今日未售出的菜品！建议在每天晚上九点后到次日早上五点前执行删除操作"
+            );
           } else if (res.code === "A0001") {
             this.$notify.error("删除失败！");
           } else if (res.code === "A0004") {
             this.$notify.error("服务器异常！");
+          } else if (res.code === "A0002") {
+            this.$notify.error(
+              "所有菜品在今日已有订单，无法删除！建议在每天晚上九点后到次日早上五点前执行删除操作"
+            );
           }
           if (this.foodIds.length == this.currentNum) {
             this.params.pageNum = 1;
