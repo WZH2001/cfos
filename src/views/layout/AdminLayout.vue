@@ -12,6 +12,16 @@
             {{ user.username }}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown" style="margin-top: -5px">
+            <el-dropdown-item>
+              <div @click="editInfoVisible = true">
+                <i class="el-icon-edit"></i>修改信息
+              </div>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <div @click="passPasswordVisible = true">
+                <i class="el-icon-edit"></i>修改密码
+              </div>
+            </el-dropdown-item>
             <el-dropdown-item
               ><div style="width: 50px; text-align: center" @click="logout">
                 <i class="el-icon-close"></i>退出
@@ -97,6 +107,90 @@
       </div>
       <!--主体数据-->
       <div class="main">
+        <el-dialog
+          title="修改个人信息"
+          :visible.sync="editInfoVisible"
+          width="30%"
+        >
+          <el-form
+            ref="editInfoForm"
+            :model="editInfo"
+            label-width="80px"
+            :rules="editInfoRules"
+          >
+            <el-form-item label="用户名" prop="username">
+              <el-input
+                v-model="editInfo.username"
+                style="width: 300px"
+                placeholder="请输入用户名"
+              ></el-input>
+            </el-form-item>
+          </el-form>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="editInfoVisible = false">取 消</el-button>
+            <el-button type="primary" @click="editAdminInfo">确 定</el-button>
+          </span>
+        </el-dialog>
+        <el-dialog
+          title="修改密码"
+          :visible.sync="passPasswordVisible"
+          width="30%"
+        >
+          <el-form
+            ref="passPasswordForm"
+            :model="passPass"
+            label-width="80px"
+            :rules="passPasswordRules"
+          >
+            <el-form-item label="旧密码" prop="password">
+              <el-input
+                show-password
+                prefix-icon="el-icon-lock"
+                v-model="passPass.password"
+                placeholder="请输入以前的密码"
+              ></el-input>
+            </el-form-item>
+          </el-form>
+          <el-dialog
+            width="30%"
+            title="修改密码"
+            :visible.sync="editPasswordVisible"
+            append-to-body
+          >
+            <el-form
+              ref="editPasswordForm"
+              :model="editPass"
+              label-width="80px"
+              :rules="editPasswordRules"
+            >
+              <el-form-item label="新密码" prop="password">
+                <el-input
+                  show-password
+                  prefix-icon="el-icon-lock"
+                  v-model="editPass.password"
+                  placeholder="请输入新密码"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="确认密码" prop="confirmPassword">
+                <el-input
+                  show-password
+                  prefix-icon="el-icon-lock"
+                  v-model="editPass.confirmPassword"
+                  placeholder="请确认密码"
+                ></el-input>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="editPasswordVisible = false">取 消</el-button>
+              <el-button type="primary" @click="editPassword">确 定</el-button>
+            </div>
+          </el-dialog>
+
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="passPasswordVisible = false">取 消</el-button>
+            <el-button type="primary" @click="toEditPassword">确 定</el-button>
+          </div>
+        </el-dialog>
         <router-view />
       </div>
     </div>
@@ -110,10 +204,106 @@ export default {
   name: "AdminLayout",
   data() {
     return {
+      editInfoVisible: false,
+      passPasswordVisible: false,
+      editPasswordVisible: false,
       user: Cookies.get("user") ? JSON.parse(Cookies.get("user")) : {},
+      editInfo: {
+        username: "",
+      },
+      editInfoRules: {
+        username: [
+          { required: true, message: "请输入用户名", trigger: "change" },
+        ],
+      },
+      passPass: {
+        password: "",
+      },
+      passPasswordRules: {
+        password: [
+          { required: true, message: "请输入以前的密码", trigger: "change" },
+        ],
+      },
+      editPass: {
+        password: "",
+        confirmPassword: "",
+      },
+      editPasswordRules: {
+        password: [
+          { required: true, message: "请输入密码", trigger: "change" },
+          { min: 3, max: 10, message: "长度为3-10个字符", trigger: "blur" },
+        ],
+        confirmPassword: [
+          { required: true, message: "请输入密码", trigger: "change" },
+          { min: 3, max: 10, message: "长度为3-10个字符", trigger: "blur" },
+        ],
+      },
     };
   },
   methods: {
+    editAdminInfo() {
+      this.$refs["editInfoForm"].validate((valid) => {
+        if (valid) {
+          // this.prerfectInfoDialog = f;
+          // request
+          //   .post("/sellerSender/senderAdd", this.senderAdd)
+          //   .then((res) => {
+          //     if (res.code === "A0000") {
+          //       this.$notify.success("添加成功！");
+          //     } else if (res.code === "A0001") {
+          //       this.$notify.error("添加失败！");
+          //     } else if (res.code === "A0004") {
+          //       this.$notify.error("服务器异常！");
+          //     } else if (res.code === "D0001") {
+          //       this.$notify.error("配送员已存在！");
+          //     }
+          //     this.load();
+          //   });
+        }
+      });
+    },
+    toEditPassword() {
+      this.$refs["passPasswordForm"].validate((valid) => {
+        if (valid) {
+          // this.prerfectInfoDialog = f;
+          // request
+          //   .post("/sellerSender/senderAdd", this.senderAdd)
+          //   .then((res) => {
+          //     if (res.code === "A0000") {
+          //       this.$notify.success("添加成功！");
+          //     } else if (res.code === "A0001") {
+          //       this.$notify.error("添加失败！");
+          //     } else if (res.code === "A0004") {
+          //       this.$notify.error("服务器异常！");
+          //     } else if (res.code === "D0001") {
+          //       this.$notify.error("配送员已存在！");
+          //     }
+          //     this.load();
+          //   });
+        }
+      });
+    },
+    editPassword() {
+      this.$refs["editPasswordForm"].validate((valid) => {
+        if (valid) {
+          // this.prerfectInfoDialog = f;
+          // request
+          //   .post("/sellerSender/senderAdd", this.senderAdd)
+          //   .then((res) => {
+          //     if (res.code === "A0000") {
+          //       this.$notify.success("添加成功！");
+          //     } else if (res.code === "A0001") {
+          //       this.$notify.error("添加失败！");
+          //     } else if (res.code === "A0004") {
+          //       this.$notify.error("服务器异常！");
+          //     } else if (res.code === "D0001") {
+          //       this.$notify.error("配送员已存在！");
+          //     }
+          //     this.load();
+          //   });
+        }
+      });
+    },
     logout() {
       this.$router.push("/login");
       //清除浏览器用户数据

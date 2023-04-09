@@ -161,27 +161,27 @@ export default {
       },
       addRules: {
         senderName: [
-          { required: true, message: "请输入姓名", trigger: "blur" },
+          { required: true, message: "请输入姓名", trigger: "change" },
         ],
         telephone: [
           { required: true, message: "请输入手机号", trigger: "change" },
           {
             pattern: /^1[3|5|7|8|9]\d{9}$/,
             message: "请输入正确的号码格式",
-            trigger: "change",
+            trigger: "blur",
           },
         ],
       },
       editRules: {
         senderEditSenderName: [
-          { required: true, message: "请输入姓名", trigger: "blur" },
+          { required: true, message: "请输入姓名", trigger: "change" },
         ],
         senderEditSenderTelephone: [
           { required: true, message: "请输入手机号", trigger: "change" },
           {
             pattern: /^1[3|5|7|8|9]\d{9}$/,
             message: "请输入正确的号码格式",
-            trigger: "change",
+            trigger: "blur",
           },
         ],
       },

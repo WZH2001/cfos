@@ -47,7 +47,7 @@
     <el-table
       :data="tableData"
       stripe
-      size="small"
+      size="medium"
       @selection-change="handleSelectionChange"
       border
       :header-cell-style="{ background: '#F5F6FA', color: '#666E92' }"
@@ -108,7 +108,7 @@
       </el-table-column>
     </el-table>
     <!--分页-->
-    <div style="margin-top: 20px">
+    <div style="margin-top: 10px">
       <el-pagination
         background
         :current-page="params.pageNum"
@@ -252,15 +252,19 @@ export default {
         foodPrice: "",
       },
       addRules: {
-        foodName: [{ required: true, message: "请输入菜品", trigger: "blur" }],
-        foodPrice: [{ required: true, message: "请输入价格", trigger: "blur" }],
+        foodName: [
+          { required: true, message: "请输入菜品", trigger: "change" },
+        ],
+        foodPrice: [
+          { required: true, message: "请输入价格", trigger: "change" },
+        ],
       },
       editRules: {
         foodsEditFoodName: [
-          { required: true, message: "请输入菜品", trigger: "blur" },
+          { required: true, message: "请输入菜品", trigger: "change" },
         ],
         foodsEditFoodPrice: [
-          { required: true, message: "请输入价格", trigger: "blur" },
+          { required: true, message: "请输入价格", trigger: "change" },
         ],
       },
     };

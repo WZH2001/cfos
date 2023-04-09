@@ -13,7 +13,7 @@
       <el-table
         :data="tableData"
         stripe
-        size="mini"
+        size="small"
         border
         :header-cell-style="{ background: '#F5F6FA', color: '#666E92' }"
         class="seller-todayOrder-table"
@@ -101,7 +101,7 @@ export default {
       currentNum: 0,
       params: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 9,
       },
     };
   },

@@ -269,22 +269,22 @@ export default {
       range: "6:00:00 - 21:00:00",
       getTimeRules: {
         getTime: [
-          { required: true, message: "请输入取餐时间", trigger: "blur" },
+          { required: true, message: "请输入取餐时间", trigger: "change" },
         ],
       },
       sendTimeRules: {
         sendTime: [
-          { required: true, message: "请输入配送时间", trigger: "blur" },
+          { required: true, message: "请输入配送时间", trigger: "change" },
         ],
       },
       multiGetTimeRules: {
         multiGetTime: [
-          { required: true, message: "请输入取餐时间", trigger: "blur" },
+          { required: true, message: "请输入取餐时间", trigger: "change" },
         ],
       },
       multiSendTimeRules: {
         multiSendTime: [
-          { required: true, message: "请输入配送时间", trigger: "blur" },
+          { required: true, message: "请输入配送时间", trigger: "change" },
         ],
       },
     };
