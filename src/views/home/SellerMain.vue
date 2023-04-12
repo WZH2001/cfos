@@ -59,56 +59,66 @@ export default {
       dayIncome: 0,
       weekIncome: 0,
       monthIncome: 0,
+      xDate: [],
+      yDate: [],
     };
   },
   created() {
     this.queryDaySellAndDayIncome();
     this.queryWeekSellAndWeekIncome();
     this.queryMonthSellAndMonthIncome();
-  },
-  mounted() {
-    var chartDom = document.getElementById("main");
-    var myChart = echarts.init(chartDom);
-    var option;
-    option = {
-      tooltip: {
-        trigger: "axis",
-        axisPointer: {
-          type: "shadow",
-        },
-      },
-      grid: {
-        left: "3%",
-        right: "4%",
-        bottom: "3%",
-        containLabel: true,
-      },
-      xAxis: [
-        {
-          type: "category",
-          data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-          axisTick: {
-            alignWithLabel: true,
-          },
-        },
-      ],
-      yAxis: [
-        {
-          type: "value",
-        },
-      ],
-      series: [
-        {
-          name: "Direct",
-          type: "bar",
-          barWidth: "60%",
-          data: [10, 52, 200, 334, 390, 330, 220],
-        },
-      ],
-    };
-    myChart.setOption(option);
+    this.queryEveryDayIncomeInThisMonth();
   },
   methods: {
+    myChart() {
+      var chartDom = document.getElementById("main");
+      var myChart = echarts.init(chartDom);
+      var option;
+      option = {
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow",
+          },
+        },
+        grid: {
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
+          containLabel: true,
+        },
+        toolbox: {
+          feature: {
+            magicType: { show: true, type: ["line", "bar"] },
+            restore: { show: true },
+            saveAsImage: { show: true },
+          },
+        },
+        xAxis: [
+          {
+            type: "category",
+            data: this.xDate,
+            axisTick: {
+              alignWithLabel: true,
+            },
+          },
+        ],
+        yAxis: [
+          {
+            type: "value",
+          },
+        ],
+        series: [
+          {
+            name: "Direct",
+            type: "bar",
+            barWidth: "60%",
+            data: this.yDate,
+          },
+        ],
+      };
+      myChart.setOption(option);
+    },
     queryDaySellAndDayIncome() {
       request.get("/sellerMain/queryDaySellAndDayIncome").then((res) => {
         if (res.code === "A0000") {
@@ -134,6 +144,17 @@ export default {
         if (res.code === "A0000") {
           this.monthSell = res.data.monthSell;
           this.monthIncome = res.data.monthIncome;
+        } else if (res.code === "A0004") {
+          this.$notify.error("服务器异常！");
+        }
+      });
+    },
+    queryEveryDayIncomeInThisMonth() {
+      request.get("/sellerMain/queryEveryDayIncomeInThisMonth").then((res) => {
+        if (res.code === "A0000") {
+          this.xDate = res.data.days;
+          this.yDate = res.data.dayIncome;
+          this.myChart();
         } else if (res.code === "A0004") {
           this.$notify.error("服务器异常！");
         }

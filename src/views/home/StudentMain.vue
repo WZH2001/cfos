@@ -61,14 +61,7 @@ export default {
       dayConsume: 0,
       weekConsume: 0,
       monthConsume: 0,
-      windowNameAndOrderNumbers: [
-        { value: 1048, name: "Search Engine" },
-        { value: 735, name: "Direct" },
-        { value: 580, name: "Email" },
-        { value: 484, name: "Union Ads" },
-        { value: 300, name: "Video Ads" },
-      ],
-      test: [],
+      windowNameAndOrderNumbers: [],
     };
   },
   created() {
@@ -77,42 +70,42 @@ export default {
     this.queryMonthOrderAndMonthConsume();
     this.queryWindowNameAndOrderNumbersAtThisMonth();
   },
-  mounted() {
-    var chartDom = document.getElementById("main");
-    var myChart = echarts.init(chartDom);
-    var option;
+  methods: {
+    myChart() {
+      var chartDom = document.getElementById("main");
+      var myChart = echarts.init(chartDom);
+      var option;
 
-    option = {
-      title: {
-        text: "本月订单各商家占比",
-        left: "center",
-      },
-      tooltip: {
-        trigger: "item",
-      },
-      legend: {
-        orient: "vertical",
-        left: "left",
-      },
-      series: [
-        {
-          name: "Access From",
-          type: "pie",
-          radius: "60%",
-          data: this.windowNameAndOrderNumbers,
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: "rgba(0, 0, 0, 0.5)",
+      option = {
+        title: {
+          text: "本月订单各商家占比",
+          left: "center",
+        },
+        tooltip: {
+          trigger: "item",
+        },
+        legend: {
+          orient: "vertical",
+          left: "left",
+        },
+        series: [
+          {
+            name: "窗口",
+            type: "pie",
+            radius: "60%",
+            data: this.windowNameAndOrderNumbers,
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: "rgba(0, 0, 0, 0.5)",
+              },
             },
           },
-        },
-      ],
-    };
-    myChart.setOption(option);
-  },
-  methods: {
+        ],
+      };
+      myChart.setOption(option);
+    },
     queryDayOrderAndDayConsume() {
       request.get("/studentMain/queryDayOrderAndDayConsume").then((res) => {
         if (res.code === "A0000") {
@@ -143,25 +136,18 @@ export default {
         }
       });
     },
-    // queryWindowNameAndOrderNumbersAtThisMonth() {
-    //   request
-    //     .get("/studentMain/queryWindowNameAndOrderNumbersAtThisMonth")
-    //     .then((res) => {
-    //       if (res.code === "A0000") {
-    //         console.log(this.test);
-    //         console.log(res.data);
-    //         for (var i = 0; i < res.data.length; i++) {
-    //           this.test[i] = {
-    //             value: res.data[i].value,
-    //             name: res.data[i].name,
-    //           };
-    //         }
-    //         console.log(this.test);
-    //       } else if (res.code === "A0004") {
-    //         this.$notify.error("服务器异常！");
-    //       }
-    //     });
-    // },
+    queryWindowNameAndOrderNumbersAtThisMonth() {
+      request
+        .get("/studentMain/queryWindowNameAndOrderNumbersAtThisMonth")
+        .then((res) => {
+          if (res.code === "A0000") {
+            this.windowNameAndOrderNumbers = res.data;
+            this.myChart();
+          } else if (res.code === "A0004") {
+            this.$notify.error("服务器异常！");
+          }
+        });
+    },
   },
 };
 </script>

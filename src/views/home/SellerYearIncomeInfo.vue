@@ -13,58 +13,90 @@
 
 <script>
 import * as echarts from "echarts";
+import request from "@/utils/Request";
 export default {
   name: "SellerYearIncomInfo",
   data() {
-    return {};
+    return {
+      yData: [],
+    };
   },
-  mounted() {
-    var chartDom = document.getElementById("main");
-    var myChart = echarts.init(chartDom);
-    var option;
-    option = {
-      tooltip: {
-        trigger: "axis",
-        axisPointer: {
-          type: "shadow",
-        },
-      },
-      grid: {
-        left: "3%",
-        right: "4%",
-        bottom: "3%",
-        containLabel: true,
-      },
-      xAxis: [
-        {
-          type: "category",
-          data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-          axisTick: {
-            alignWithLabel: true,
+  created() {
+    this.queryEveryMonthIncomeInThisYear();
+  },
+  methods: {
+    myChart() {
+      var chartDom = document.getElementById("main");
+      var myChart = echarts.init(chartDom);
+      var option;
+      option = {
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow",
           },
         },
-      ],
-      yAxis: [
-        {
-          type: "value",
+        grid: {
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
+          containLabel: true,
         },
-      ],
-      series: [
-        {
-          name: "Direct1",
-          type: "bar",
-          barWidth: "60%",
-          data: [10, 52, 200, 334, 390, 330, 220],
+        toolbox: {
+          feature: {
+            magicType: { show: true, type: ["line", "bar"] },
+            restore: { show: true },
+            saveAsImage: { show: true },
+          },
         },
-        {
-          name: "Direct2",
-          type: "line",
-          barWidth: "60%",
-          data: [10, 52, 200, 334, 390, 330, 220],
-        },
-      ],
-    };
-    myChart.setOption(option);
+        xAxis: [
+          {
+            type: "category",
+            data: [
+              "January",
+              "February",
+              "March",
+              "March",
+              "May",
+              "June",
+              "July",
+              "August",
+              "September",
+              "October",
+              "November",
+              "December",
+            ],
+            axisTick: {
+              alignWithLabel: true,
+            },
+          },
+        ],
+        yAxis: [
+          {
+            type: "value",
+          },
+        ],
+        series: [
+          {
+            name: "Direct1",
+            type: "bar",
+            barWidth: "60%",
+            data: this.yData,
+          },
+        ],
+      };
+      myChart.setOption(option);
+    },
+    queryEveryMonthIncomeInThisYear() {
+      request.get("/sellerMain/queryEveryMonthIncomeInThisYear").then((res) => {
+        if (res.code === "A0000") {
+          this.yData = res.data;
+          this.myChart();
+        } else if (res.code === "A0004") {
+          this.$notify.error("服务器异常！");
+        }
+      });
+    },
   },
 };
 </script>

@@ -36,7 +36,7 @@
       <el-table-column
         align="center"
         prop="windowName"
-        label="窗口名"
+        label="所属窗口"
       ></el-table-column>
       <el-table-column
         align="center"
