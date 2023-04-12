@@ -4,16 +4,16 @@
       <el-row :gutter="10" style="margin-bottom: 20px">
         <el-col :span="6">
           <el-card>
-            <div class="cardStyle">今日销量：</div>
-            <div class="cardStyle">本周销量：</div>
-            <div class="cardStyle">本月销量：</div>
+            <div><span class="cardStyle">今日销量：</span>{{ daySell }}</div>
+            <div><span class="cardStyle">本周销量：</span>{{ weekSell }}</div>
+            <div><span class="cardStyle">本月销量：</span>{{ monthSell }}</div>
           </el-card>
         </el-col>
         <el-col :span="6">
           <el-card>
             <div class="cardStyle">今日收入</div>
             <div style="padding: 10px 0; text-align: center; font-weight: bold">
-              10
+              {{ dayIncome }}
             </div>
           </el-card>
         </el-col>
@@ -21,7 +21,7 @@
           <el-card>
             <div class="cardStyle">本周收入</div>
             <div style="padding: 10px 0; text-align: center; font-weight: bold">
-              10
+              {{ weekIncome }}
             </div>
           </el-card></el-col
         >
@@ -29,7 +29,7 @@
           <el-card
             ><div class="cardStyle">本月收入</div>
             <div style="padding: 10px 0; text-align: center; font-weight: bold">
-              10
+              {{ monthIncome }}
             </div></el-card
           ></el-col
         >
@@ -37,7 +37,7 @@
     </div>
     <div>
       <div style="margin-bottom: 20px">
-        <el-button type="warning" @click="$router.push('/sellerYearIncomeInfo')"
+        <el-button type="success" @click="$router.push('/sellerYearIncomeInfo')"
           >查看年度销量</el-button
         >
       </div>
@@ -48,10 +48,23 @@
 
 <script>
 import * as echarts from "echarts";
+import request from "@/utils/Request";
 export default {
   name: "SellerMain",
   data() {
-    return {};
+    return {
+      daySell: 0,
+      weekSell: 0,
+      monthSell: 0,
+      dayIncome: 0,
+      weekIncome: 0,
+      monthIncome: 0,
+    };
+  },
+  created() {
+    this.queryDaySellAndDayIncome();
+    this.queryWeekSellAndWeekIncome();
+    this.queryMonthSellAndMonthIncome();
   },
   mounted() {
     var chartDom = document.getElementById("main");
@@ -95,7 +108,38 @@ export default {
     };
     myChart.setOption(option);
   },
-  methods: {},
+  methods: {
+    queryDaySellAndDayIncome() {
+      request.get("/sellerMain/queryDaySellAndDayIncome").then((res) => {
+        if (res.code === "A0000") {
+          this.daySell = res.data.daySell;
+          this.dayIncome = res.data.dayIncome;
+        } else if (res.code === "A0004") {
+          this.$notify.error("服务器异常！");
+        }
+      });
+    },
+    queryWeekSellAndWeekIncome() {
+      request.get("/sellerMain/queryWeekSellAndWeekIncome").then((res) => {
+        if (res.code === "A0000") {
+          this.weekSell = res.data.weekSell;
+          this.weekIncome = res.data.weekIncome;
+        } else if (res.code === "A0004") {
+          this.$notify.error("服务器异常！");
+        }
+      });
+    },
+    queryMonthSellAndMonthIncome() {
+      request.get("/sellerMain/queryMonthSellAndMonthIncome").then((res) => {
+        if (res.code === "A0000") {
+          this.monthSell = res.data.monthSell;
+          this.monthIncome = res.data.monthIncome;
+        } else if (res.code === "A0004") {
+          this.$notify.error("服务器异常！");
+        }
+      });
+    },
+  },
 };
 </script>
 

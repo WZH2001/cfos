@@ -34,6 +34,11 @@
       ></el-table-column>
       <el-table-column
         align="center"
+        prop="windowName"
+        label="所属窗口"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         prop="senderTelephone"
         label="联系方式"
       ></el-table-column>
@@ -106,7 +111,7 @@ export default {
   methods: {
     load() {
       request
-        .get("/previous/previousSender", {
+        .get("/adminPrevious/previousSender", {
           params: this.params,
         })
         .then((res) => {
@@ -121,14 +126,12 @@ export default {
     },
     deletePreviousSender(senderId) {
       request
-        .post("/previous/deletePreviousSender", {
+        .post("/adminPrevious/deletePreviousSender", {
           senderId: senderId,
         })
         .then((res) => {
           if (res.code === "A0000") {
             this.$notify.success("删除成功！");
-          } else if (res.code === "A0001") {
-            this.$notify.error("删除失败！");
           } else if (res.code === "A0004") {
             this.$notify.error("服务器异常！");
           }
@@ -149,12 +152,10 @@ export default {
         this.$notify.info("请选择要删除的配送员！");
       } else {
         request
-          .post("/previous/batchDeleteSender", this.senderIds)
+          .post("/adminPrevious/batchDeleteSender", this.senderIds)
           .then((res) => {
             if (res.code === "A0000") {
               this.$notify.success("删除成功！");
-            } else if (res.code === "A0001") {
-              this.$notify.error("删除失败！");
             } else if (res.code === "A0004") {
               this.$notify.error("服务器异常！");
             }

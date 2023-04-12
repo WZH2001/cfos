@@ -53,8 +53,8 @@
       ></el-table-column>
       <el-table-column
         align="center"
-        prop="updateTime"
-        label="最近修改时间"
+        prop="deleteTime"
+        label="删除时间"
       ></el-table-column>
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">

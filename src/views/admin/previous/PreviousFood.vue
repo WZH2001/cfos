@@ -39,6 +39,11 @@
       ></el-table-column>
       <el-table-column
         align="center"
+        prop="windowName"
+        label="所属窗口"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         prop="createTime"
         label="添加时间"
       ></el-table-column>
@@ -106,13 +111,12 @@ export default {
   methods: {
     load() {
       request
-        .get("/previous/previousFood", {
+        .get("/adminPrevious/previousFood", {
           params: this.params,
         })
         .then((res) => {
           if (res.code === "A0000") {
             this.tableData = res.data.previousFood;
-            s;
             this.total = res.data.total;
             this.currentNum = res.data.currentNum;
           } else if (res.code === "A0004") {
@@ -122,14 +126,12 @@ export default {
     },
     deletePreviousFood(foodId) {
       request
-        .post("/previous/deletePreviousFood", {
+        .post("/adminPrevious/deletePreviousFood", {
           foodId: foodId,
         })
         .then((res) => {
           if (res.code === "A0000") {
             this.$notify.success("删除成功！");
-          } else if (res.code === "A0001") {
-            this.$notify.error("删除失败！");
           } else if (res.code === "A0004") {
             this.$notify.error("服务器异常！");
           }
@@ -149,19 +151,19 @@ export default {
       if (this.foodIds == "") {
         this.$notify.info("请选择要删除的菜品！");
       } else {
-        request.post("/previous/batchDeleteFood", this.foodIds).then((res) => {
-          if (res.code === "A0000") {
-            this.$notify.success("删除成功！");
-          } else if (res.code === "A0001") {
-            this.$notify.error("删除失败！");
-          } else if (res.code === "A0004") {
-            this.$notify.error("服务器异常！");
-          }
-          if (this.foodIds.length == this.currentNum) {
-            this.params.pageNum = 1;
-          }
-          this.load();
-        });
+        request
+          .post("/adminPrevious/batchDeleteFood", this.foodIds)
+          .then((res) => {
+            if (res.code === "A0000") {
+              this.$notify.success("删除成功！");
+            } else if (res.code === "A0004") {
+              this.$notify.error("服务器异常！");
+            }
+            if (this.foodIds.length == this.currentNum) {
+              this.params.pageNum = 1;
+            }
+            this.load();
+          });
       }
     },
     handleCurrentChange(pageNum) {

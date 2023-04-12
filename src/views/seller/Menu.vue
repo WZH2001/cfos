@@ -241,6 +241,7 @@ export default {
         foodsEditFoodIsRecommend: "",
         foodId: "",
       },
+      sellerInfo: "",
       addVisible: false,
       editVisible: false,
       descriptionVisible: false,
@@ -271,6 +272,7 @@ export default {
   },
   created() {
     this.load();
+    this.querySellerInfo();
   },
   methods: {
     load() {
@@ -287,6 +289,15 @@ export default {
             this.$notify.error("服务器异常！");
           }
         });
+    },
+    querySellerInfo() {
+      request.get("/userOption/querySellerInfo").then((res) => {
+        if (res.code === "A0000") {
+          this.sellerInfo = res.data;
+        } else if (res.code === "A0004") {
+          this.$notify.error("服务器异常！");
+        }
+      });
     },
     fuzzyQueryOne() {
       flag = true;
@@ -318,8 +329,15 @@ export default {
       this.load();
     },
     menuAdd() {
-      this.addVisible = true;
-      this.foodsAdd = {};
+      if (
+        this.sellerInfo.principalName == null ||
+        this.sellerInfo.principalName === ""
+      ) {
+        this.$notify.info("请先完善个人信息！");
+      } else {
+        this.addVisible = true;
+        this.foodsAdd = {};
+      }
     },
     save() {
       this.$refs["menuAddForm"].validate((valid) => {

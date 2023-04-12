@@ -111,7 +111,7 @@ export default {
   methods: {
     load() {
       request
-        .get("/previous/previousSeller", {
+        .get("/adminPrevious/previousSeller", {
           params: this.params,
         })
         .then((res) => {
@@ -126,14 +126,12 @@ export default {
     },
     deletePreviousSeller(sellerId) {
       request
-        .post("/previous/deletePreviousSeller", {
+        .post("/adminPrevious/deletePreviousSeller", {
           sellerId: sellerId,
         })
         .then((res) => {
           if (res.code === "A0000") {
             this.$notify.success("删除成功！");
-          } else if (res.code === "A0001") {
-            this.$notify.error("删除失败！");
           } else if (res.code === "A0004") {
             this.$notify.error("服务器异常！");
           }
@@ -154,12 +152,10 @@ export default {
         this.$notify.info("请选择要删除的商家！");
       } else {
         request
-          .post("/previous/batchDeleteSeller", this.sellerIds)
+          .post("/adminPrevious/batchDeleteSeller", this.sellerIds)
           .then((res) => {
             if (res.code === "A0000") {
               this.$notify.success("删除成功！");
-            } else if (res.code === "A0001") {
-              this.$notify.error("删除失败！");
             } else if (res.code === "A0004") {
               this.$notify.error("服务器异常！");
             }

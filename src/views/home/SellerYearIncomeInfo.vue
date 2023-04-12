@@ -1,47 +1,12 @@
 <template>
   <div>
-    <div style="width: 1280px">
-      <el-row :gutter="10" style="margin-bottom: 20px">
-        <el-col :span="6">
-          <el-card>
-            <div class="cardStyle">今日销量：</div>
-            <div class="cardStyle">本周销量：</div>
-            <div class="cardStyle">本月销量：</div>
-          </el-card>
-        </el-col>
-        <el-col :span="6">
-          <el-card>
-            <div class="cardStyle">今日收入</div>
-            <div style="padding: 10px 0; text-align: center; font-weight: bold">
-              10
-            </div>
-          </el-card>
-        </el-col>
-        <el-col :span="6">
-          <el-card>
-            <div class="cardStyle">本周收入</div>
-            <div style="padding: 10px 0; text-align: center; font-weight: bold">
-              10
-            </div>
-          </el-card></el-col
-        >
-        <el-col :span="6">
-          <el-card
-            ><div class="cardStyle">本月收入</div>
-            <div style="padding: 10px 0; text-align: center; font-weight: bold">
-              10
-            </div></el-card
-          ></el-col
-        >
-      </el-row>
-    </div>
     <div>
       <div style="margin-bottom: 20px">
         <el-button type="success" @click="$router.push('/sellerMain')"
           >返回</el-button
         >
       </div>
-      <div id="main" style="width: 1280px; height: 530px"></div>
+      <div id="main" style="width: 1280px; height: 600px"></div>
     </div>
   </div>
 </template>

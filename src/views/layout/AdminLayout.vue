@@ -9,7 +9,7 @@
       <div class="right">
         <el-dropdown size="medium">
           <span class="el-dropdown-link" style="cursor: pointer">
-            {{ user.username }}<i class="el-icon-arrow-down el-icon--right"></i>
+            {{ oldUsername }}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown" style="margin-top: -5px">
             <el-dropdown-item>
@@ -22,11 +22,9 @@
                 <i class="el-icon-edit"></i>修改密码
               </div>
             </el-dropdown-item>
-            <el-dropdown-item
-              ><div style="width: 50px; text-align: center" @click="logout">
-                <i class="el-icon-close"></i>退出
-              </div></el-dropdown-item
-            >
+            <el-dropdown-item>
+              <div @click="logout"><i class="el-icon-close"></i>退出系统</div>
+            </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -108,7 +106,7 @@
       <!--主体数据-->
       <div class="main">
         <el-dialog
-          title="修改个人信息"
+          title="修改用户名"
           :visible.sync="editInfoVisible"
           width="30%"
         >
@@ -191,7 +189,7 @@
             <el-button type="primary" @click="toEditPassword">确 定</el-button>
           </div>
         </el-dialog>
-        <router-view />
+        <router-view v-if="isRouterAlive" />
       </div>
     </div>
   </div>
@@ -199,21 +197,23 @@
 
 <script>
 import Cookies from "js-cookie";
-
+import request from "@/utils/Request";
 export default {
   name: "AdminLayout",
   data() {
     return {
+      isRouterAlive: true,
       editInfoVisible: false,
       passPasswordVisible: false,
       editPasswordVisible: false,
-      user: Cookies.get("user") ? JSON.parse(Cookies.get("user")) : {},
+      oldUsername: "",
       editInfo: {
         username: "",
       },
       editInfoRules: {
         username: [
           { required: true, message: "请输入用户名", trigger: "change" },
+          { min: 3, max: 10, message: "长度为3-10个字符", trigger: "blur" },
         ],
       },
       passPass: {
@@ -240,67 +240,95 @@ export default {
       },
     };
   },
+  provide() {
+    return {
+      reload: this.reload,
+    };
+  },
+  mounted() {
+    this.queryAdminInfo();
+  },
   methods: {
+    queryAdminInfo() {
+      request.get("/userOption/queryAdminInfo").then((res) => {
+        if (res.code === "A0000") {
+          this.editInfo.username = res.data;
+          this.oldUsername = res.data;
+        } else if (res.code === "A0004") {
+          this.$notify.error("服务器异常！");
+        }
+      });
+    },
     editAdminInfo() {
       this.$refs["editInfoForm"].validate((valid) => {
         if (valid) {
-          // this.prerfectInfoDialog = f;
-          // request
-          //   .post("/sellerSender/senderAdd", this.senderAdd)
-          //   .then((res) => {
-          //     if (res.code === "A0000") {
-          //       this.$notify.success("添加成功！");
-          //     } else if (res.code === "A0001") {
-          //       this.$notify.error("添加失败！");
-          //     } else if (res.code === "A0004") {
-          //       this.$notify.error("服务器异常！");
-          //     } else if (res.code === "D0001") {
-          //       this.$notify.error("配送员已存在！");
-          //     }
-          //     this.load();
-          //   });
+          this.editInfoVisible = false;
+          request
+            .post("/userOption/editAdminInfo", {
+              oldUsername: this.oldUsername,
+              username: this.editInfo.username,
+            })
+            .then((res) => {
+              if (res.code === "A0000") {
+                this.$notify.success("修改成功！");
+                this.isRouterAlive = false;
+                this.$nextTick(function () {
+                  this.isRouterAlive = true;
+                });
+              } else if (res.code === "B0003") {
+                this.$notify.error("该用户名已存在！");
+              } else if (res.code === "A0001") {
+                this.$notify.error("修改失败！");
+              } else if (res.code === "A0004") {
+                this.$notify.error("服务器异常！");
+              }
+              this.queryAdminInfo();
+            });
         }
       });
     },
     toEditPassword() {
       this.$refs["passPasswordForm"].validate((valid) => {
         if (valid) {
-          // this.prerfectInfoDialog = f;
-          // request
-          //   .post("/sellerSender/senderAdd", this.senderAdd)
-          //   .then((res) => {
-          //     if (res.code === "A0000") {
-          //       this.$notify.success("添加成功！");
-          //     } else if (res.code === "A0001") {
-          //       this.$notify.error("添加失败！");
-          //     } else if (res.code === "A0004") {
-          //       this.$notify.error("服务器异常！");
-          //     } else if (res.code === "D0001") {
-          //       this.$notify.error("配送员已存在！");
-          //     }
-          //     this.load();
-          //   });
+          request
+            .get("/userOption/queryAdminPassword", {
+              params: this.passPass,
+            })
+            .then((res) => {
+              if (res.code === "A0000") {
+                this.editPasswordVisible = true;
+              } else if (res.code === "B0001") {
+                this.$notify.error("密码错误！");
+              } else if (res.code === "A0004") {
+                this.$notify.error("服务器异常！");
+              }
+            });
         }
       });
     },
     editPassword() {
       this.$refs["editPasswordForm"].validate((valid) => {
         if (valid) {
-          // this.prerfectInfoDialog = f;
-          // request
-          //   .post("/sellerSender/senderAdd", this.senderAdd)
-          //   .then((res) => {
-          //     if (res.code === "A0000") {
-          //       this.$notify.success("添加成功！");
-          //     } else if (res.code === "A0001") {
-          //       this.$notify.error("添加失败！");
-          //     } else if (res.code === "A0004") {
-          //       this.$notify.error("服务器异常！");
-          //     } else if (res.code === "D0001") {
-          //       this.$notify.error("配送员已存在！");
-          //     }
-          //     this.load();
-          //   });
+          if (this.editPass.password != this.editPass.confirmPassword) {
+            this.$notify.error("两次密码不一致！");
+          } else {
+            this.editPasswordVisible = false;
+            this.passPasswordVisible = false;
+            request
+              .post("/userOption/editAdminPassword", {
+                password: this.editPass.password,
+              })
+              .then((res) => {
+                if (res.code === "A0000") {
+                  Cookies.set("user", JSON.stringify(res.data));
+                  this.$notify.success("修改成功！");
+                } else if (res.code === "A0001") {
+                  this.$notify.error("修改失败！");
+                } else if (res.code === "A0004") {
+                  this.$notify.error("服务器异常！");
+                }
+              });
+          }
         }
       });
     },

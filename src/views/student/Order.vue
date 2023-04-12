@@ -259,6 +259,7 @@ export default {
       num: 1,
       title: "",
       multiOrderTableData: [],
+      studentInfo: "",
       params: {
         pageNum: 1,
         pageSize: 10,
@@ -291,6 +292,7 @@ export default {
   },
   created() {
     this.load();
+    this.queryStudentInfo();
   },
   mounted() {
     let data = new Date();
@@ -315,6 +317,15 @@ export default {
             this.$notify.error("服务器异常！");
           }
         });
+    },
+    queryStudentInfo() {
+      request.get("/userOption/queryStudentInfo").then((res) => {
+        if (res.code === "A0000") {
+          this.studentInfo = res.data;
+        } else if (res.code === "A0004") {
+          this.$notify.error("服务器异常！");
+        }
+      });
     },
     reset() {
       this.params = {
@@ -346,10 +357,17 @@ export default {
         });
     },
     orderForm(thisMenu) {
-      this.outerVisible = true;
-      this.description = thisMenu.description;
-      this.foodId = thisMenu.foodId;
-      this.title = thisMenu.foodName;
+      if (
+        this.studentInfo.studentName == null ||
+        this.studentInfo.studentName === ""
+      ) {
+        this.$notify.info("请先完善个人信息！");
+      } else {
+        this.outerVisible = true;
+        this.description = thisMenu.description;
+        this.foodId = thisMenu.foodId;
+        this.title = thisMenu.foodName;
+      }
     },
     selectPattern() {
       if (this.pattern == 1) {
@@ -423,12 +441,19 @@ export default {
       });
     },
     preMultipleOrder() {
-      if (this.multiOrderTableData == 0) {
-        this.$notify.info("请选择菜品！");
-      } else if (this.multiOrderTableData.length > 5) {
-        this.$notify.info("最多只能选择五样！");
+      if (
+        this.studentInfo.studentName == null ||
+        this.studentInfo.studentName === ""
+      ) {
+        this.$notify.info("请先完善个人信息！");
       } else {
-        this.multiOrderVisible = true;
+        if (this.multiOrderTableData == 0) {
+          this.$notify.info("请选择菜品！");
+        } else if (this.multiOrderTableData.length > 5) {
+          this.$notify.info("最多只能选择五样！");
+        } else {
+          this.multiOrderVisible = true;
+        }
       }
     },
     multipleOrder() {

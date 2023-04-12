@@ -45,18 +45,13 @@
           <div class="studentLayoutRight">
             <el-dropdown size="medium">
               <span style="cursor: pointer">
-                {{ user.username
+                {{ prefectInfo.oldUsername
                 }}<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown" style="margin-top: -15px">
                 <el-dropdown-item>
                   <div @click="prePrefect">
                     <i class="el-icon-plus"></i>完善信息
-                  </div>
-                </el-dropdown-item>
-                <el-dropdown-item>
-                  <div @click="editInfoDialog = true">
-                    <i class="el-icon-edit"></i>修改信息
                   </div>
                 </el-dropdown-item>
                 <el-dropdown-item>
@@ -85,11 +80,11 @@
               label-width="140px"
               :rules="prefectInfoRules"
             >
-              <el-form-item label="用户名">
+              <el-form-item label="用户名" prop="username">
                 <el-input
                   v-model="prefectInfo.username"
-                  disabled
                   style="width: 300px"
+                  placeholder="请输入用户名"
                 ></el-input>
               </el-form-item>
               <el-form-item label="姓名" prop="studentName">
@@ -125,6 +120,7 @@
                 <el-date-picker
                   type="date"
                   placeholder="选择日期"
+                  value-format="yyyy-MM-dd"
                   v-model="prefectInfo.enrollmentDate"
                   style="width: 300px"
                 ></el-date-picker>
@@ -133,6 +129,7 @@
                 <el-date-picker
                   type="date"
                   placeholder="选择日期"
+                  value-format="yyyy-MM-dd"
                   v-model="prefectInfo.graduateDate"
                   style="width: 300px"
                 ></el-date-picker>
@@ -141,81 +138,6 @@
             <span slot="footer" class="dialog-footer">
               <el-button @click="prerfectInfoDialog = false">取 消</el-button>
               <el-button type="primary" @click="prefectStudentInfo"
-                >确 定</el-button
-              >
-            </span>
-          </el-dialog>
-
-          <el-dialog
-            title="修改个人信息"
-            :visible.sync="editInfoDialog"
-            width="40%"
-          >
-            <el-form
-              ref="editInfoForm"
-              :model="prefectInfo"
-              label-width="140px"
-              :rules="prefectInfoRules"
-            >
-              <el-form-item label="用户名" prop="username">
-                <el-input
-                  v-model="prefectInfo.username"
-                  style="width: 300px"
-                ></el-input>
-              </el-form-item>
-              <el-form-item
-                label="姓名"
-                prop="studentName"
-                placeholder="请输入用户名"
-              >
-                <el-input
-                  v-model="prefectInfo.studentName"
-                  style="width: 300px"
-                  placeholder="请输入姓名"
-                ></el-input>
-              </el-form-item>
-              <el-form-item label="电话" prop="studentTelephone">
-                <el-input
-                  v-model="prefectInfo.studentTelephone"
-                  style="width: 300px"
-                  placeholder="请输入电话"
-                  maxlength="11"
-                ></el-input>
-              </el-form-item>
-              <el-form-item label="楼号" prop="floor">
-                <el-input
-                  v-model="prefectInfo.floor"
-                  style="width: 300px"
-                  placeholder="请输入寝室楼号"
-                ></el-input>
-              </el-form-item>
-              <el-form-item label="寝室号" prop="room">
-                <el-input
-                  v-model="prefectInfo.room"
-                  style="width: 300px"
-                  placeholder="请输入寝室号"
-                ></el-input>
-              </el-form-item>
-              <el-form-item label="入学日期" prop="enrollmentDate">
-                <el-date-picker
-                  type="date"
-                  placeholder="选择日期"
-                  v-model="prefectInfo.enrollmentDate"
-                  style="width: 300px"
-                ></el-date-picker>
-              </el-form-item>
-              <el-form-item label="毕业日期" prop="graduateDate">
-                <el-date-picker
-                  type="date"
-                  placeholder="选择日期"
-                  v-model="prefectInfo.graduateDate"
-                  style="width: 300px"
-                ></el-date-picker>
-              </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-              <el-button @click="editInfoDialog = false">取 消</el-button>
-              <el-button type="primary" @click="editStudentInfo"
                 >确 定</el-button
               >
             </span>
@@ -280,13 +202,13 @@
             </el-dialog>
 
             <div slot="footer" class="dialog-footer">
-              <el-button @click="passPasswordVisible = false">取 消</el-button>
+              <el-button @click="cancelPassPassword">取 消</el-button>
               <el-button type="primary" @click="toEditPassword"
                 >确 定</el-button
               >
             </div>
           </el-dialog>
-          <router-view />
+          <router-view v-if="isRouterAlive" />
         </div>
       </el-container>
     </el-container>
@@ -294,17 +216,23 @@
 </template>
 
 <script>
+import request from "@/utils/Request";
 import Cookies from "js-cookie";
 export default {
   name: "StudentLayout",
+  provide() {
+    return {
+      reload: this.reload,
+    };
+  },
   data() {
     return {
+      isRouterAlive: true,
       prerfectInfoDialog: false,
-      editInfoDialog: false,
       passPasswordVisible: false,
       editPasswordVisible: false,
-      user: Cookies.get("user") ? JSON.parse(Cookies.get("user")) : {},
       prefectInfo: {
+        oldUsername: "",
         username: "",
         studentName: "",
         studentTelephone: "",
@@ -316,6 +244,7 @@ export default {
       prefectInfoRules: {
         username: [
           { required: true, message: "请输入用户名", trigger: "change" },
+          { min: 3, max: 10, message: "长度为3-10个字符", trigger: "blur" },
         ],
         studentName: [
           { required: true, message: "请输入姓名", trigger: "change" },
@@ -375,91 +304,94 @@ export default {
       },
     };
   },
+  mounted() {
+    this.queryStudentInfo();
+  },
   methods: {
+    queryStudentInfo() {
+      request.get("/userOption/queryStudentInfo").then((res) => {
+        if (res.code === "A0000") {
+          this.prefectInfo = res.data;
+          this.prefectInfo.oldUsername = res.data.username;
+        } else if (res.code === "A0004") {
+          this.$notify.error("服务器异常！");
+        }
+      });
+    },
     prePrefect() {
       this.prerfectInfoDialog = true;
+    },
+    cancelPassPassword() {
+      this.passPasswordVisible = false;
+      this.passPass.password = "";
     },
     prefectStudentInfo() {
       this.$refs["prefectInfoForm"].validate((valid) => {
         if (valid) {
-          // this.prerfectInfoDialog = f;
-          // request
-          //   .post("/sellerSender/senderAdd", this.senderAdd)
-          //   .then((res) => {
-          //     if (res.code === "A0000") {
-          //       this.$notify.success("添加成功！");
-          //     } else if (res.code === "A0001") {
-          //       this.$notify.error("添加失败！");
-          //     } else if (res.code === "A0004") {
-          //       this.$notify.error("服务器异常！");
-          //     } else if (res.code === "D0001") {
-          //       this.$notify.error("配送员已存在！");
-          //     }
-          //     this.load();
-          //   });
-        }
-      });
-    },
-    editStudentInfo() {
-      this.$refs["editInfoForm"].validate((valid) => {
-        if (valid) {
-          // this.prerfectInfoDialog = f;
-          // request
-          //   .post("/sellerSender/senderAdd", this.senderAdd)
-          //   .then((res) => {
-          //     if (res.code === "A0000") {
-          //       this.$notify.success("添加成功！");
-          //     } else if (res.code === "A0001") {
-          //       this.$notify.error("添加失败！");
-          //     } else if (res.code === "A0004") {
-          //       this.$notify.error("服务器异常！");
-          //     } else if (res.code === "D0001") {
-          //       this.$notify.error("配送员已存在！");
-          //     }
-          //     this.load();
-          //   });
+          this.prerfectInfoDialog = false;
+          request
+            .post("/userOption/prefectStudentInfo", this.prefectInfo)
+            .then((res) => {
+              if (res.code === "A0000") {
+                this.$notify.success("保存成功！");
+                this.isRouterAlive = false;
+                this.$nextTick(function () {
+                  this.isRouterAlive = true;
+                });
+              } else if (res.code === "B0003") {
+                this.$notify.error("该用户名已存在！");
+              } else if (res.code === "A0001") {
+                this.$notify.error("保存失败！");
+              } else if (res.code === "A0004") {
+                this.$notify.error("服务器异常！");
+              }
+              this.queryStudentInfo();
+            });
         }
       });
     },
     toEditPassword() {
       this.$refs["passPasswordForm"].validate((valid) => {
         if (valid) {
-          // this.prerfectInfoDialog = f;
-          // request
-          //   .post("/sellerSender/senderAdd", this.senderAdd)
-          //   .then((res) => {
-          //     if (res.code === "A0000") {
-          //       this.$notify.success("添加成功！");
-          //     } else if (res.code === "A0001") {
-          //       this.$notify.error("添加失败！");
-          //     } else if (res.code === "A0004") {
-          //       this.$notify.error("服务器异常！");
-          //     } else if (res.code === "D0001") {
-          //       this.$notify.error("配送员已存在！");
-          //     }
-          //     this.load();
-          //   });
+          request
+            .get("/userOption/queryStudentPassword", {
+              params: this.passPass,
+            })
+            .then((res) => {
+              if (res.code === "A0000") {
+                this.editPasswordVisible = true;
+              } else if (res.code === "B0001") {
+                this.$notify.error("密码错误！");
+              } else if (res.code === "A0004") {
+                this.$notify.error("服务器异常！");
+              }
+            });
         }
       });
     },
     editPassword() {
       this.$refs["editPasswordForm"].validate((valid) => {
         if (valid) {
-          // this.prerfectInfoDialog = f;
-          // request
-          //   .post("/sellerSender/senderAdd", this.senderAdd)
-          //   .then((res) => {
-          //     if (res.code === "A0000") {
-          //       this.$notify.success("添加成功！");
-          //     } else if (res.code === "A0001") {
-          //       this.$notify.error("添加失败！");
-          //     } else if (res.code === "A0004") {
-          //       this.$notify.error("服务器异常！");
-          //     } else if (res.code === "D0001") {
-          //       this.$notify.error("配送员已存在！");
-          //     }
-          //     this.load();
-          //   });
+          if (this.editPass.password != this.editPass.confirmPassword) {
+            this.$notify.error("两次密码不一致！");
+          } else {
+            this.editPasswordVisible = false;
+            this.passPasswordVisible = false;
+            request
+              .post("/userOption/editStudentPassword", {
+                password: this.editPass.password,
+              })
+              .then((res) => {
+                if (res.code === "A0000") {
+                  Cookies.set("user", JSON.stringify(res.data));
+                  this.$notify.success("修改成功！");
+                } else if (res.code === "A0001") {
+                  this.$notify.error("修改失败！");
+                } else if (res.code === "A0004") {
+                  this.$notify.error("服务器异常！");
+                }
+              });
+          }
         }
       });
     },

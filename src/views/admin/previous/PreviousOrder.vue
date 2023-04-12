@@ -29,6 +29,16 @@
       ></el-table-column>
       <el-table-column
         align="center"
+        prop="studentName"
+        label="学生姓名"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="studentAddress"
+        label="地址"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         prop="foodName"
         label="菜品名称"
       ></el-table-column>
@@ -126,7 +136,7 @@ export default {
   methods: {
     load() {
       request
-        .get("/previous/previousOrder", {
+        .get("/adminPrevious/previousOrder", {
           params: this.params,
         })
         .then((res) => {
@@ -141,14 +151,12 @@ export default {
     },
     deletePreviousOrder(orderId) {
       request
-        .post("/previous/deletePreviousOrder", {
+        .post("/adminPrevious/deletePreviousOrder", {
           orderId: orderId,
         })
         .then((res) => {
           if (res.code === "A0000") {
             this.$notify.success("删除成功！");
-          } else if (res.code === "A0001") {
-            this.$notify.error("删除失败！");
           } else if (res.code === "A0004") {
             this.$notify.error("服务器异常！");
           }
@@ -169,12 +177,10 @@ export default {
         this.$notify.info("请选择要删除的订单！");
       } else {
         request
-          .post("/previous/batchDeleteOrder", this.orderIds)
+          .post("/adminPrevious/batchDeleteOrder", this.orderIds)
           .then((res) => {
             if (res.code === "A0000") {
               this.$notify.success("删除成功！");
-            } else if (res.code === "A0001") {
-              this.$notify.error("删除失败！");
             } else if (res.code === "A0004") {
               this.$notify.error("服务器异常！");
             }

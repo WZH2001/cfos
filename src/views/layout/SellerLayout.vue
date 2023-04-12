@@ -61,18 +61,13 @@
           <div class="sellerLayoutRight">
             <el-dropdown size="medium">
               <span style="cursor: pointer">
-                {{ user.username
+                {{ prefectInfo.username
                 }}<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown" style="margin-top: -15px">
                 <el-dropdown-item>
                   <div @click="prefectVisible = true">
                     <i class="el-icon-plus"></i>完善信息
-                  </div>
-                </el-dropdown-item>
-                <el-dropdown-item>
-                  <div @click="editInfoVisible = true">
-                    <i class="el-icon-edit"></i>修改信息
                   </div>
                 </el-dropdown-item>
                 <el-dropdown-item>
@@ -102,63 +97,6 @@
           >
             <el-form
               ref="prefectInfoForm"
-              :model="prefectInfo"
-              label-width="140px"
-              :rules="prefectInfoRules"
-            >
-              <el-form-item label="用户名">
-                <el-input
-                  v-model="prefectInfo.username"
-                  disabled
-                  style="width: 300px"
-                ></el-input>
-              </el-form-item>
-              <el-form-item label="负责人姓名" prop="principalName">
-                <el-input
-                  v-model="prefectInfo.principalName"
-                  style="width: 300px"
-                  placeholder="请输入负责人姓名"
-                ></el-input>
-              </el-form-item>
-              <el-form-item label="电话" prop="principalTelephone">
-                <el-input
-                  v-model="prefectInfo.principalTelephone"
-                  style="width: 300px"
-                  placeholder="请输入负责人电话"
-                  maxlength="11"
-                ></el-input>
-              </el-form-item>
-              <el-form-item label="地址" prop="windowAddress">
-                <el-input
-                  v-model="prefectInfo.windowAddress"
-                  style="width: 80px"
-                  placeholder="1"
-                ></el-input
-                >&nbsp;楼
-              </el-form-item>
-              <el-form-item label="窗口名" prop="windowName">
-                <el-input
-                  v-model="prefectInfo.windowName"
-                  style="width: 300px"
-                  placeholder="请输入窗口名称"
-                ></el-input>
-              </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-              <el-button @click="prefectVisible = false">取 消</el-button>
-              <el-button type="primary" @click="prefectSellerInfo"
-                >确 定</el-button
-              >
-            </span>
-          </el-dialog>
-
-          <el-dialog
-            title="修改个人信息"
-            :visible.sync="editInfoVisible"
-            width="40%"
-          >
-            <el-form
-              ref="editInfoForm"
               :model="prefectInfo"
               label-width="140px"
               :rules="prefectInfoRules"
@@ -202,8 +140,8 @@
               </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-              <el-button @click="editInfoVisible = false">取 消</el-button>
-              <el-button type="primary" @click="editSellerInfo"
+              <el-button @click="prefectVisible = false">取 消</el-button>
+              <el-button type="primary" @click="prefectSellerInfo"
                 >确 定</el-button
               >
             </span>
@@ -269,13 +207,13 @@
             </el-dialog>
 
             <div slot="footer" class="dialog-footer">
-              <el-button @click="passPasswordVisible = false">取 消</el-button>
+              <el-button @click="cancelPassPassword">取 消</el-button>
               <el-button type="primary" @click="toEditPassword"
                 >确 定</el-button
               >
             </div>
           </el-dialog>
-          <router-view />
+          <router-view v-if="isRouterAlive" />
         </div>
       </el-container>
     </el-container>
@@ -284,17 +222,17 @@
 
 <script>
 import Cookies from "js-cookie";
-
+import request from "@/utils/Request";
 export default {
   name: "SellerLayout",
   data() {
     return {
+      isRouterAlive: true,
       prefectVisible: false,
-      editInfoVisible: false,
       passPasswordVisible: false,
       editPasswordVisible: false,
-      user: Cookies.get("user") ? JSON.parse(Cookies.get("user")) : {},
       prefectInfo: {
+        oldUsername: "",
         username: "",
         principalName: "",
         principalTelephone: "",
@@ -304,6 +242,7 @@ export default {
       prefectInfoRules: {
         username: [
           { required: true, message: "请输入用户名", trigger: "change" },
+          { min: 3, max: 10, message: "长度为3-10个字符", trigger: "blur" },
         ],
         principalName: [
           { required: true, message: "请输入负责人姓名", trigger: "change" },
@@ -352,88 +291,96 @@ export default {
       },
     };
   },
+  provide() {
+    return {
+      reload: this.reload,
+    };
+  },
+  mounted() {
+    this.querySellerInfo();
+  },
   methods: {
-    prefectSellerInfo() {
-      this.$refs["prefectInfoForm"].validate((valid) => {
-        if (valid) {
-          // this.prerfectInfoDialog = f;
-          // request
-          //   .post("/sellerSender/senderAdd", this.senderAdd)
-          //   .then((res) => {
-          //     if (res.code === "A0000") {
-          //       this.$notify.success("添加成功！");
-          //     } else if (res.code === "A0001") {
-          //       this.$notify.error("添加失败！");
-          //     } else if (res.code === "A0004") {
-          //       this.$notify.error("服务器异常！");
-          //     } else if (res.code === "D0001") {
-          //       this.$notify.error("配送员已存在！");
-          //     }
-          //     this.load();
-          //   });
+    querySellerInfo() {
+      request.get("/userOption/querySellerInfo").then((res) => {
+        if (res.code === "A0000") {
+          this.prefectInfo = res.data;
+          this.prefectInfo.oldUsername = res.data.username;
+        } else if (res.code === "A0004") {
+          this.$notify.error("服务器异常！");
         }
       });
     },
-    editSellerInfo() {
-      this.$refs["editInfoForm"].validate((valid) => {
+    cancelPassPassword() {
+      this.passPasswordVisible = false;
+      this.passPass.password = "";
+    },
+    prefectSellerInfo() {
+      this.$refs["prefectInfoForm"].validate((valid) => {
         if (valid) {
-          // this.prerfectInfoDialog = f;
-          // request
-          //   .post("/sellerSender/senderAdd", this.senderAdd)
-          //   .then((res) => {
-          //     if (res.code === "A0000") {
-          //       this.$notify.success("添加成功！");
-          //     } else if (res.code === "A0001") {
-          //       this.$notify.error("添加失败！");
-          //     } else if (res.code === "A0004") {
-          //       this.$notify.error("服务器异常！");
-          //     } else if (res.code === "D0001") {
-          //       this.$notify.error("配送员已存在！");
-          //     }
-          //     this.load();
-          //   });
+          this.prefectVisible = false;
+          request
+            .post("/userOption/prefectSellerInfo", this.prefectInfo)
+            .then((res) => {
+              if (res.code === "A0000") {
+                this.$notify.success("保存成功！");
+                this.isRouterAlive = false;
+                this.$nextTick(function () {
+                  this.isRouterAlive = true;
+                });
+              } else if (res.code === "B0003") {
+                this.$notify.error("该用户名已存在！");
+              } else if (res.code === "A0001") {
+                this.$notify.error("保存失败！");
+              } else if (res.code === "A0004") {
+                this.$notify.error("服务器异常！");
+              }
+              this.querySellerInfo();
+            });
         }
       });
     },
     toEditPassword() {
       this.$refs["passPasswordForm"].validate((valid) => {
         if (valid) {
-          // this.prerfectInfoDialog = f;
-          // request
-          //   .post("/sellerSender/senderAdd", this.senderAdd)
-          //   .then((res) => {
-          //     if (res.code === "A0000") {
-          //       this.$notify.success("添加成功！");
-          //     } else if (res.code === "A0001") {
-          //       this.$notify.error("添加失败！");
-          //     } else if (res.code === "A0004") {
-          //       this.$notify.error("服务器异常！");
-          //     } else if (res.code === "D0001") {
-          //       this.$notify.error("配送员已存在！");
-          //     }
-          //     this.load();
-          //   });
+          request
+            .get("/userOption/querySellerPassword", {
+              params: this.passPass,
+            })
+            .then((res) => {
+              if (res.code === "A0000") {
+                this.editPasswordVisible = true;
+              } else if (res.code === "B0001") {
+                this.$notify.error("密码错误！");
+              } else if (res.code === "A0004") {
+                this.$notify.error("服务器异常！");
+              }
+            });
         }
       });
     },
     editPassword() {
       this.$refs["editPasswordForm"].validate((valid) => {
         if (valid) {
-          // this.prerfectInfoDialog = f;
-          // request
-          //   .post("/sellerSender/senderAdd", this.senderAdd)
-          //   .then((res) => {
-          //     if (res.code === "A0000") {
-          //       this.$notify.success("添加成功！");
-          //     } else if (res.code === "A0001") {
-          //       this.$notify.error("添加失败！");
-          //     } else if (res.code === "A0004") {
-          //       this.$notify.error("服务器异常！");
-          //     } else if (res.code === "D0001") {
-          //       this.$notify.error("配送员已存在！");
-          //     }
-          //     this.load();
-          //   });
+          if (this.editPass.password != this.editPass.confirmPassword) {
+            this.$notify.error("两次密码不一致！");
+          } else {
+            this.editPasswordVisible = false;
+            this.passPasswordVisible = false;
+            request
+              .post("/userOption/editSellerPassword", {
+                password: this.editPass.password,
+              })
+              .then((res) => {
+                if (res.code === "A0000") {
+                  Cookies.set("user", JSON.stringify(res.data));
+                  this.$notify.success("修改成功！");
+                } else if (res.code === "A0001") {
+                  this.$notify.error("修改失败！");
+                } else if (res.code === "A0004") {
+                  this.$notify.error("服务器异常！");
+                }
+              });
+          }
         }
       });
     },
@@ -441,7 +388,19 @@ export default {
       this.$router.push("/login");
       Cookies.remove("user");
     },
-    unSubscribe() {},
+    unSubscribe() {
+      request.post("/userOption/unSubscribe").then((res) => {
+        if (res.code === "A0000") {
+          this.$notify.success("已注销用户！");
+          Cookies.remove("user");
+          this.$router.push("/login");
+        } else if (res.code === "A0001") {
+          this.$notify.error("注销失败！");
+        } else if (res.code === "A0004") {
+          this.$notify.error("服务器异常！");
+        }
+      });
+    },
   },
 };
 </script>
