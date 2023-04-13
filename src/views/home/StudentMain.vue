@@ -88,6 +88,11 @@ export default {
           orient: "vertical",
           left: "left",
         },
+        label: {
+          formatter: function (data) {
+            return `${data.name}(${data.percent.toFixed(1)}%)`;
+          },
+        },
         series: [
           {
             name: "窗口",

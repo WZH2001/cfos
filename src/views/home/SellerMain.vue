@@ -60,7 +60,8 @@ export default {
       weekIncome: 0,
       monthIncome: 0,
       xDate: [],
-      yDate: [],
+      daysSell: [],
+      daysIncome: [],
     };
   },
   created() {
@@ -94,6 +95,9 @@ export default {
             saveAsImage: { show: true },
           },
         },
+        legend: {
+          data: ["日销量", "日收入"],
+        },
         xAxis: [
           {
             type: "category",
@@ -106,14 +110,43 @@ export default {
         yAxis: [
           {
             type: "value",
+            name: "日销量",
+            min: 0,
+            interval: 10,
+            alignTicks: true,
+            axisLine: {
+              show: true,
+            },
+            axisLabel: {
+              formatter: "{value} 份",
+            },
+          },
+          {
+            type: "value",
+            name: "日收入",
+            min: 0,
+            interval: 50,
+            alignTicks: true,
+            position: "right",
+            axisLine: {
+              show: true,
+            },
+            axisLabel: {
+              formatter: "{value} 元",
+            },
           },
         ],
         series: [
           {
-            name: "Direct",
+            name: "日销量",
             type: "bar",
-            barWidth: "60%",
-            data: this.yDate,
+            data: this.daysSell,
+          },
+          {
+            name: "日收入",
+            yAxisIndex: 1,
+            type: "bar",
+            data: this.daysIncome,
           },
         ],
       };
@@ -153,7 +186,8 @@ export default {
       request.get("/sellerMain/queryEveryDayIncomeInThisMonth").then((res) => {
         if (res.code === "A0000") {
           this.xDate = res.data.days;
-          this.yDate = res.data.dayIncome;
+          this.daysSell = res.data.daysSell;
+          this.daysIncome = res.data.daysIncome;
           this.myChart();
         } else if (res.code === "A0004") {
           this.$notify.error("服务器异常！");

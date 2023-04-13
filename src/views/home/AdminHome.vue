@@ -61,8 +61,26 @@ export default {
             name: "月/季/年收入",
             min: 0,
             interval: 50,
+            axisLine: {
+              show: true,
+            },
             axisLabel: {
               formatter: "{value} 元",
+            },
+          },
+          {
+            type: "value",
+            name: "Evaporation",
+            position: "right",
+            alignTicks: true,
+            axisLine: {
+              show: true,
+              lineStyle: {
+                color: colors[0],
+              },
+            },
+            axisLabel: {
+              formatter: "{value} ml",
             },
           },
         ],

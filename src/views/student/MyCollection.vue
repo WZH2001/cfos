@@ -128,6 +128,7 @@
               :picker-options="{
                 selectableRange: range,
               }"
+              :disabled="isNotAtRange"
             >
             </el-time-picker>
           </el-form-item>
@@ -155,6 +156,7 @@
               :picker-options="{
                 selectableRange: range,
               }"
+              :disabled="isNotAtRange"
             >
             </el-time-picker>
           </el-form-item>
@@ -200,6 +202,7 @@
             :picker-options="{
               selectableRange: range,
             }"
+            :disabled="isNotAtRange"
           >
           </el-time-picker>
         </el-form-item>
@@ -218,6 +221,7 @@
             :picker-options="{
               selectableRange: range,
             }"
+            :disabled="isNotAtRange"
           >
           </el-time-picker>
         </el-form-item>
@@ -260,6 +264,7 @@ export default {
       innerVisible1: false,
       innerVisible2: false,
       multiOrderVisible: false,
+      isNotAtRange: false,
       pattern: "1",
       get: {
         getTime: "",
@@ -315,7 +320,11 @@ export default {
     let minute = data.getMinutes();
     let second = data.getSeconds();
     if (hour >= 6) {
-      this.range = hour + ":" + minute + ":" + second + "- 21:00:00";
+      if (hour < 21) {
+        this.range = hour + ":" + minute + ":" + second + "- 21:00:00";
+      } else {
+        this.isNotAtRange = true;
+      }
     }
   },
   methods: {

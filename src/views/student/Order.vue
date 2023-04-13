@@ -113,6 +113,7 @@
               :picker-options="{
                 selectableRange: range,
               }"
+              :disabled="isNotAtRange"
             >
             </el-time-picker>
           </el-form-item>
@@ -140,6 +141,7 @@
               :picker-options="{
                 selectableRange: range,
               }"
+              :disabled="isNotAtRange"
             >
             </el-time-picker>
           </el-form-item>
@@ -185,6 +187,7 @@
             :picker-options="{
               selectableRange: range,
             }"
+            :disabled="isNotAtRange"
           >
           </el-time-picker>
         </el-form-item>
@@ -203,6 +206,7 @@
             :picker-options="{
               selectableRange: range,
             }"
+            :disabled="isNotAtRange"
           >
           </el-time-picker>
         </el-form-item>
@@ -268,6 +272,7 @@ export default {
         windowName: "",
       },
       range: "6:00:00 - 21:00:00",
+      isNotAtRange: false,
       getTimeRules: {
         getTime: [
           { required: true, message: "请输入取餐时间", trigger: "change" },
@@ -291,6 +296,7 @@ export default {
     };
   },
   created() {
+    this.range = "6:00:00 - 21:00:00";
     this.load();
     this.queryStudentInfo();
   },
@@ -300,7 +306,11 @@ export default {
     let minute = data.getMinutes();
     let second = data.getSeconds();
     if (hour >= 6) {
-      this.range = hour + ":" + minute + ":" + second + "- 21:00:00";
+      if (hour < 21) {
+        this.range = hour + ":" + minute + ":" + second + "- 21:00:00";
+      } else {
+        this.isNotAtRange = true;
+      }
     }
   },
   methods: {

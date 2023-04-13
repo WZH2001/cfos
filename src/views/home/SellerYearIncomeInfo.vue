@@ -18,7 +18,8 @@ export default {
   name: "SellerYearIncomInfo",
   data() {
     return {
-      yData: [],
+      monthsSell: [],
+      monthsIncome: [],
     };
   },
   created() {
@@ -49,6 +50,9 @@ export default {
             saveAsImage: { show: true },
           },
         },
+        legend: {
+          data: ["月销量", "月收入"],
+        },
         xAxis: [
           {
             type: "category",
@@ -74,14 +78,41 @@ export default {
         yAxis: [
           {
             type: "value",
+            name: "月销量",
+            min: 0,
+            interval: 50,
+            axisLine: {
+              show: true,
+            },
+            axisLabel: {
+              formatter: "{value} 份",
+            },
+          },
+          {
+            type: "value",
+            name: "月收入",
+            min: 0,
+            interval: 100,
+            position: "right",
+            axisLine: {
+              show: true,
+            },
+            axisLabel: {
+              formatter: "{value} 元",
+            },
           },
         ],
         series: [
           {
-            name: "Direct1",
+            name: "月销量",
             type: "bar",
-            barWidth: "60%",
-            data: this.yData,
+            data: this.monthsSell,
+          },
+          {
+            name: "月收入",
+            type: "bar",
+            yAxisIndex: 1,
+            data: this.monthsIncome,
           },
         ],
       };
@@ -90,7 +121,8 @@ export default {
     queryEveryMonthIncomeInThisYear() {
       request.get("/sellerMain/queryEveryMonthIncomeInThisYear").then((res) => {
         if (res.code === "A0000") {
-          this.yData = res.data;
+          this.monthsSell = res.data.monthsSell;
+          this.monthsIncome = res.data.monthsIncome;
           this.myChart();
         } else if (res.code === "A0004") {
           this.$notify.error("服务器异常！");
