@@ -32,6 +32,9 @@
         </el-form-item>
       </el-form>
       <div class="loginBottom">
+        <el-link type="primary" style="margin-right: 5px" @click="www"
+          >忘记密码</el-link
+        >
         <router-link :to="{ path: '/register' }" class="toRegister"
           ><el-link type="primary">点击注册</el-link></router-link
         >
@@ -82,6 +85,8 @@ export default {
               this.$notify.error("密码错误！");
             } else if (res.code === "B0002") {
               this.$notify.error("用户名不存在，请注册！");
+            } else if (res.code === "A0004") {
+              this.$notify.error("服务器异常！");
             }
           });
         }

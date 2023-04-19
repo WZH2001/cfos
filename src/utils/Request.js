@@ -2,7 +2,7 @@ import axios from 'axios'
 import Cookies from "js-cookie";
 
 const request = axios.create({
-    baseURL: 'http://localhost:9090',
+    baseURL: 'http://127.0.0.1:9090',
     timeout: 5000
 })
 
@@ -26,7 +26,7 @@ request.interceptors.response.use(
     response => {
         let res = response.data;
         // 如果是返回的文件
-        if (response.config.responseType === 'blob') {
+        if (response.config.responseType === 'blob' || response.config.responseType === 'document') {
             return res
         }
         // 兼容服务端返回的字符串数据

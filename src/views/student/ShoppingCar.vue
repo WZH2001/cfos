@@ -60,13 +60,24 @@
       ></el-table-column>
       <el-table-column
         align="center"
+        prop="windowAddress"
+        label="窗口地址"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         prop="foodNumber"
         label="份数"
       ></el-table-column>
-      <el-table-column align="center" label="操作">
+      <el-table-column align="center" label="操作" width="240px">
         <template slot-scope="scope">
           <el-button
             type="success"
+            style="margin-right: -5px"
+            @click="buyOneOrderA(scope.row)"
+            ><i class="el-icon-check"></i>支付</el-button
+          >
+          <el-button
+            type="primary"
             style="margin-right: 5px"
             @click="myOrderDetails(scope.row)"
             >详情<i class="el-icon-more"></i
@@ -92,7 +103,7 @@
         <el-descriptions
           v-model="myOrder"
           direction="vertical"
-          :column="4"
+          :column="3"
           border
         >
           <el-descriptions-item label="菜品名称">{{
@@ -100,9 +111,6 @@
           }}</el-descriptions-item>
           <el-descriptions-item label="菜品价格">{{
             myOrder.foodPrice
-          }}</el-descriptions-item>
-          <el-descriptions-item label="是否收藏">{{
-            myOrder.isCollected
           }}</el-descriptions-item>
           <el-descriptions-item label="窗口名称">{{
             myOrder.windowName
@@ -122,17 +130,17 @@
           <el-descriptions-item label="配送时间">{{
             orderDetails.sendTime
           }}</el-descriptions-item>
-          <el-descriptions-item label="配送员姓名">{{
-            orderDetails.senderName
-          }}</el-descriptions-item>
-          <el-descriptions-item label="配送员电话">{{
-            orderDetails.senderTelephone
-          }}</el-descriptions-item>
           <el-descriptions-item label="订单份数">
             <el-input-number v-model="num" :min="1" :max="5"></el-input-number>
           </el-descriptions-item>
         </el-descriptions>
         <div slot="footer" class="dialog-footer">
+          <el-button
+            type="success"
+            style="margin-right: 5px"
+            @click="buyOneOrderB"
+            ><i class="el-icon-check"></i>支付订单</el-button
+          >
           <el-popconfirm
             confirm-button-text="确定"
             cancel-button-text="我再想想"
@@ -151,7 +159,7 @@
             icon="el-icon-info"
             icon-color="red"
             title="您确定取消订单吗？"
-            style="margin-left: 10px"
+            style="margin-left: 5px"
             @confirm="cancelSingleOrderB"
           >
             <el-button type="danger" slot="reference"
@@ -160,7 +168,7 @@
           </el-popconfirm>
           <el-button
             type="primary"
-            style="margin-left: 10px"
+            style="margin-left: 5px"
             @click="collectSingleOrder"
             ><i class="el-icon-star-on"></i>收藏菜品</el-button
           >
@@ -196,9 +204,10 @@ export default {
       currentNum: 0,
       num: 1,
       foodNumber: 0,
-      orderId: "",
+      shoppingCarOrderId: "",
+      foodPrice: 0,
       foodId: "",
-      orderIds: [],
+      shoppingCarOrderIds: [],
       differs: [],
       foodIds: [],
       myOrder: {},
@@ -206,6 +215,7 @@ export default {
       isCollected: "",
       foodIdsNotCollected: [],
       dialogTableVisible: false,
+      shoppingCarOrder: {},
       params: {
         pageNum: 1,
         pageSize: 10,
@@ -221,12 +231,12 @@ export default {
   methods: {
     load() {
       request
-        .get("/myOrder/myOrderInfo", {
+        .get("/shoppingCar/myShoppingCarInfo", {
           params: this.params,
         })
         .then((res) => {
           if (res.code === "A0000") {
-            this.tableData = res.data.myOrderInfoList;
+            this.tableData = res.data.myShoppingCarInfo;
             this.total = res.data.total;
             this.currentNum = res.data.currentNum;
           } else if (res.code === "A0004") {
@@ -235,16 +245,18 @@ export default {
         });
     },
     myOrderDetails(order) {
+      this.dialogTableVisible = true;
       this.foodNumber = order.foodNumber;
       this.num = order.foodNumber;
-      this.orderId = order.orderId;
+      this.shoppingCarOrderId = order.shoppingCarOrderId;
+      this.foodPrice = order.foodPrice;
       this.foodId = order.foodId;
       this.isCollected = order.isCollected;
       this.myOrder = order;
       request
-        .get("/myOrder/myOrderInfoDetails", {
+        .get("/shoppingCar/myShoppingCarInfoDetails", {
           params: {
-            orderId: order.orderId,
+            shoppingCarOrderId: order.shoppingCarOrderId,
             senderId: order.senderId,
           },
         })
@@ -257,15 +269,6 @@ export default {
             }
             if (res.data.sendTime == null) {
               this.orderDetails.sendTime = "无";
-              this.orderDetails.senderName = "无";
-              this.orderDetails.senderTelephone = "无";
-            }
-            if (
-              res.data.sendTime != null &&
-              (res.data.senderName == null || res.data.senderTelephone == null)
-            ) {
-              this.orderDetails.senderName = "商家还没有分配配送员";
-              this.orderDetails.senderTelephone = "商家还没有分配配送员";
             }
           } else if (res.code === "A0004") {
             this.$notify.error("服务器异常！");
@@ -275,11 +278,9 @@ export default {
     orderUpdate() {
       if (this.foodNumber != this.num) {
         request
-          .post("/myOrder/orderUpdate", {
+          .post("/shoppingCar/orderUpdate", {
             foodNumber: this.num,
-            orderId: this.orderId,
-            differ: this.num - this.foodNumber,
-            foodId: this.foodId,
+            shoppingCarOrderId: this.shoppingCarOrderId,
           })
           .then((res) => {
             if (res.code === "A0000") {
@@ -296,10 +297,8 @@ export default {
     },
     cancelSingleOrderA(params) {
       request
-        .post("/myOrder/cancelSingleOrder", {
-          orderId: params.orderId,
-          differ: 0 - params.foodNumber,
-          foodId: params.foodId,
+        .post("/shoppingCar/cancelSingleOrder", {
+          shoppingCarOrderId: params.shoppingCarOrderId,
         })
         .then((res) => {
           if (res.code === "A0000") {
@@ -317,10 +316,8 @@ export default {
     },
     cancelSingleOrderB() {
       request
-        .post("/myOrder/cancelSingleOrder", {
-          orderId: this.orderId,
-          differ: 0 - this.foodNumber,
-          foodId: this.foodId,
+        .post("/shoppingCar/cancelSingleOrder", {
+          shoppingCarOrderId: this.shoppingCarOrderId,
         })
         .then((res) => {
           if (res.code === "A0000") {
@@ -338,9 +335,9 @@ export default {
         });
     },
     handleSelectionChange(selection) {
-      this.orderIds = [];
+      this.shoppingCarOrderIds = [];
       selection.forEach((element) => {
-        this.orderIds.push(element.orderId);
+        this.shoppingCarOrderIds.push(element.shoppingCarOrderId);
       });
       this.differs = [];
       selection.forEach((element) => {
@@ -358,13 +355,9 @@ export default {
       });
     },
     batchCancelOrder() {
-      if (this.orderIds != "") {
+      if (this.shoppingCarOrderIds != "") {
         request
-          .post("/myOrder/batchCancelOrder", {
-            orderIds: this.orderIds,
-            differs: this.differs,
-            foodIds: this.foodIds,
-          })
+          .post("/shoppingCar/batchCancelOrder", this.shoppingCarOrderIds)
           .then((res) => {
             if (res.code === "A0000") {
               this.$notify.success("已取消订单！");
@@ -373,7 +366,7 @@ export default {
             } else if (res.code === "A0004") {
               this.$$notify.error("服务器异常！");
             }
-            if (this.orderIds.length == this.currentNum) {
+            if (this.shoppingCarOrderIds.length == this.currentNum) {
               this.params.pageNum = 1;
             }
             this.load();
@@ -405,7 +398,7 @@ export default {
       }
     },
     batchCollect() {
-      if (this.foodIds != "") {
+      if (this.foodIds != "" || this.foodIds != null) {
         if (this.foodIdsNotCollected == "") {
           this.$notify.info("当前选择已收藏！");
           this.load();
@@ -425,6 +418,35 @@ export default {
         }
       } else {
         this.$notify.info("请选择收藏数据！");
+      }
+    },
+    buyOneOrderA(param) {
+      if (new Date().getHours > 21) {
+        this.$notify.info(请在晚上九点之前完成支付);
+      } else {
+        let url =
+          "http://localhost:9090/shoppingCar/pay?subject=" +
+          param.foodName +
+          "&traceNo=" +
+          param.shoppingCarOrderId +
+          "&totalAmount=" +
+          param.foodNumber * param.foodPrice;
+        window.open(url);
+      }
+    },
+    buyOneOrderB() {
+      if (new Date().getHours > 21) {
+        this.$notify.info(请在晚上九点之前完成支付);
+      } else {
+        let url =
+          "http://localhost:9090/shoppingCar/pay?subject=" +
+          this.foodName +
+          "&traceNo=" +
+          this.shoppingCarOrderId +
+          "&totalAmount=" +
+          this.foodNumber * this.foodPrice;
+        window.open(url);
+        this.dialogTableVisible = false;
       }
     },
     handleCurrentChange(pageNum) {

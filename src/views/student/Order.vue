@@ -97,11 +97,11 @@
     <el-dialog :title="title" :visible.sync="outerVisible" width="30%">
       菜品描述：{{ description }}<br /><br /><br />
       请选择：
-      <el-radio v-model="pattern" label="1">在食堂吃</el-radio>
+      <el-radio v-model="pattern" label="1">堂食</el-radio>
       <el-radio v-model="pattern" label="2">食堂配送</el-radio>
       <el-dialog
         width="30%"
-        title="在食堂吃"
+        title="堂食"
         :visible.sync="innerVisible1"
         append-to-body
       >
@@ -171,7 +171,7 @@
         <el-table-column label="份数">1 </el-table-column>
       </el-table>
       &nbsp;&nbsp;请选择：
-      <el-radio v-model="pattern" label="1">在食堂吃</el-radio>
+      <el-radio v-model="pattern" label="1">堂食</el-radio>
       <el-radio v-model="pattern" label="2">食堂配送</el-radio>
       <el-form
         :model="multiGet"
@@ -392,14 +392,14 @@ export default {
           this.innerVisible1 = false;
           this.outerVisible = false;
           request
-            .post("/studentOrder/eatAtCanteenOrder", {
+            .post("/studentOrder/eatAtCanteenOrderAddTOShoppingCar", {
               foodId: this.foodId,
               getTime: this.get.getTime,
               number: this.num,
             })
             .then((res) => {
               if (res.code === "A0000") {
-                this.$notify.success("订餐成功！");
+                this.$notify.success("已加入到我的订单，请前往支付！");
               } else if (res.code === "A0001") {
                 this.$notify.error("订餐失败！");
               } else if (res.code === "A0004") {
@@ -419,14 +419,14 @@ export default {
           this.innerVisible2 = false;
           this.outerVisible = false;
           request
-            .post("/studentOrder/deliveryOrder", {
+            .post("/studentOrder/deliveryOrderAddTOShoppingCar", {
               foodId: this.foodId,
               sendTime: this.send.sendTime,
               number: this.num,
             })
             .then((res) => {
               if (res.code === "A0000") {
-                this.$notify.success("订单成功！");
+                this.$notify.success("已生成订单，请前往支付！");
               } else if (res.code === "A0001") {
                 this.$notify.error("订餐失败！");
               } else if (res.code === "A0004") {
@@ -440,6 +440,7 @@ export default {
         }
       });
     },
+
     handleSelectionChange(selection) {
       this.foodIds = [];
       selection.forEach((element) => {
@@ -478,13 +479,13 @@ export default {
         if (valid) {
           this.multiOrderVisible = false;
           request
-            .post("/studentOrder/multipleOrderAtCanteen", {
+            .post("/studentOrder/multipleOrderAtCanteenAddTOShoppingCar", {
               foodIds: this.foodIds,
               takeTime: this.multiGet.multiGetTime,
             })
             .then((res) => {
               if (res.code === "A0000") {
-                this.$notify.success("订餐成功！");
+                this.$notify.success("已加入到我的订单，请前往支付");
               } else if (res.code === "A0001") {
                 this.$notify.error("订餐失败！");
               } else if (res.code === "A0004") {
@@ -502,13 +503,13 @@ export default {
         if (valid) {
           this.multiOrderVisible = false;
           request
-            .post("/studentOrder/multipleDeliveryOrder", {
+            .post("/studentOrder/multipleDeliveryOrderAddTOShoppingCar", {
               foodIds: this.foodIds,
               sendTime: this.multiSend.multiSendTime,
             })
             .then((res) => {
               if (res.code === "A0000") {
-                this.$notify.success("订单成功！");
+                this.$notify.success("已生成订单，请前往支付！");
               } else if (res.code === "A0001") {
                 this.$notify.error("订餐失败！");
               } else if (res.code === "A0004") {

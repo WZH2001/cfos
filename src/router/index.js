@@ -37,14 +37,20 @@ const routes = [
         component: () => import('../views/student/Order.vue')
       },
       {
+        path: '/shoppingCar',
+        name: 'shoppingCar',
+        component: () => import('../views/student/ShoppingCar.vue')
+      },
+      
+      {
         path: '/collect',
         name: 'collect',
         component: () => import('../views/student/Collect.vue')
       },
       {
-        path: '/myOrder',
-        name: 'myOrder',
-        component: () => import('../views/student/MyOrder.vue')
+        path: '/myTodayOrder',
+        name: 'myTodayOrder',
+        component: () => import('../views/student/MyTodayOrder.vue')
       },
       {
         path: '/myCollection',

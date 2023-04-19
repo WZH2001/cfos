@@ -18,8 +18,8 @@
             <i class="el-icon-s-order"></i>
             <span>去订餐</span>
           </el-menu-item>
-          <el-menu-item index="/myOrder">
-            <i class="el-icon-s-order"></i>
+          <el-menu-item index="/shoppingCar">
+            <i class="el-icon-shopping-cart-1"></i>
             <span>我的订单</span>
           </el-menu-item>
           <el-menu-item index="/collect">

@@ -30,16 +30,11 @@ export default {
           trigger: "axis",
           axisPointer: {
             type: "cross",
-            crossStyle: {
-              color: "#999",
-            },
           },
         },
         toolbox: {
           feature: {
             dataView: { show: true, readOnly: false },
-            magicType: { show: true, type: ["line", "bar"] },
-            restore: { show: true },
             saveAsImage: { show: true },
           },
         },
@@ -75,9 +70,6 @@ export default {
             alignTicks: true,
             axisLine: {
               show: true,
-              lineStyle: {
-                color: colors[0],
-              },
             },
             axisLabel: {
               formatter: "{value} ml",

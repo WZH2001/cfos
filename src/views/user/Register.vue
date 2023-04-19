@@ -90,6 +90,8 @@ export default {
                 this.$router.push("/login");
               } else if (res.code === "B0003") {
                 this.$notify.error("用户名已存在！");
+              } else if (res.code === "A0004") {
+                this.$notify.error("服务器异常！");
               }
             });
           }
