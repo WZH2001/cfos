@@ -55,11 +55,6 @@
                   </div>
                 </el-dropdown-item>
                 <el-dropdown-item>
-                  <div @click="passPasswordVisible = true">
-                    <i class="el-icon-edit"></i>修改密码
-                  </div>
-                </el-dropdown-item>
-                <el-dropdown-item>
                   <div @click="logout">
                     <i class="el-icon-close"></i>退出系统
                   </div>
@@ -142,72 +137,6 @@
               >
             </span>
           </el-dialog>
-          <el-dialog
-            title="修改密码"
-            :visible.sync="passPasswordVisible"
-            width="30%"
-          >
-            <el-form
-              ref="passPasswordForm"
-              :model="passPass"
-              label-width="80px"
-              :rules="passPasswordRules"
-            >
-              <el-form-item label="旧密码" prop="password">
-                <el-input
-                  show-password
-                  prefix-icon="el-icon-lock"
-                  v-model="passPass.password"
-                  placeholder="请输入以前的密码"
-                ></el-input>
-              </el-form-item>
-            </el-form>
-            <el-dialog
-              width="30%"
-              title="修改密码"
-              :visible.sync="editPasswordVisible"
-              append-to-body
-            >
-              <el-form
-                ref="editPasswordForm"
-                :model="editPass"
-                label-width="80px"
-                :rules="editPasswordRules"
-              >
-                <el-form-item label="新密码" prop="password">
-                  <el-input
-                    show-password
-                    prefix-icon="el-icon-lock"
-                    v-model="editPass.password"
-                    placeholder="请输入新密码"
-                  ></el-input>
-                </el-form-item>
-                <el-form-item label="确认密码" prop="confirmPassword">
-                  <el-input
-                    show-password
-                    prefix-icon="el-icon-lock"
-                    v-model="editPass.confirmPassword"
-                    placeholder="请确认密码"
-                  ></el-input>
-                </el-form-item>
-              </el-form>
-              <div slot="footer" class="dialog-footer">
-                <el-button @click="editPasswordVisible = false"
-                  >取 消</el-button
-                >
-                <el-button type="primary" @click="editPassword"
-                  >确 定</el-button
-                >
-              </div>
-            </el-dialog>
-
-            <div slot="footer" class="dialog-footer">
-              <el-button @click="cancelPassPassword">取 消</el-button>
-              <el-button type="primary" @click="toEditPassword"
-                >确 定</el-button
-              >
-            </div>
-          </el-dialog>
           <router-view v-if="isRouterAlive" />
         </div>
       </el-container>
@@ -229,8 +158,6 @@ export default {
     return {
       isRouterAlive: true,
       prerfectInfoDialog: false,
-      passPasswordVisible: false,
-      editPasswordVisible: false,
       prefectInfo: {
         oldUsername: "",
         username: "",
@@ -244,7 +171,7 @@ export default {
       prefectInfoRules: {
         username: [
           { required: true, message: "请输入用户名", trigger: "change" },
-          { min: 3, max: 10, message: "长度为3-10个字符", trigger: "blur" },
+          { min: 3, max: 20, message: "长度为3-20个字符", trigger: "blur" },
         ],
         studentName: [
           { required: true, message: "请输入姓名", trigger: "change" },
@@ -280,28 +207,6 @@ export default {
           { required: true, message: "请输入毕业日期", trigger: "change" },
         ],
       },
-      passPass: {
-        password: "",
-      },
-      passPasswordRules: {
-        password: [
-          { required: true, message: "请输入以前的密码", trigger: "change" },
-        ],
-      },
-      editPass: {
-        password: "",
-        confirmPassword: "",
-      },
-      editPasswordRules: {
-        password: [
-          { required: true, message: "请输入密码", trigger: "change" },
-          { min: 3, max: 10, message: "长度为3-10个字符", trigger: "blur" },
-        ],
-        confirmPassword: [
-          { required: true, message: "请输入密码", trigger: "change" },
-          { min: 3, max: 10, message: "长度为3-10个字符", trigger: "blur" },
-        ],
-      },
     };
   },
   mounted() {
@@ -320,10 +225,6 @@ export default {
     },
     prePrefect() {
       this.prerfectInfoDialog = true;
-    },
-    cancelPassPassword() {
-      this.passPasswordVisible = false;
-      this.passPass.password = "";
     },
     prefectStudentInfo() {
       this.$refs["prefectInfoForm"].validate((valid) => {
@@ -347,51 +248,6 @@ export default {
               }
               this.queryStudentInfo();
             });
-        }
-      });
-    },
-    toEditPassword() {
-      this.$refs["passPasswordForm"].validate((valid) => {
-        if (valid) {
-          request
-            .get("/userOption/queryStudentPassword", {
-              params: this.passPass,
-            })
-            .then((res) => {
-              if (res.code === "A0000") {
-                this.editPasswordVisible = true;
-              } else if (res.code === "B0001") {
-                this.$notify.error("密码错误！");
-              } else if (res.code === "A0004") {
-                this.$notify.error("服务器异常！");
-              }
-            });
-        }
-      });
-    },
-    editPassword() {
-      this.$refs["editPasswordForm"].validate((valid) => {
-        if (valid) {
-          if (this.editPass.password != this.editPass.confirmPassword) {
-            this.$notify.error("两次密码不一致！");
-          } else {
-            this.editPasswordVisible = false;
-            this.passPasswordVisible = false;
-            request
-              .post("/userOption/editStudentPassword", {
-                password: this.editPass.password,
-              })
-              .then((res) => {
-                if (res.code === "A0000") {
-                  Cookies.set("user", JSON.stringify(res.data));
-                  this.$notify.success("修改成功！");
-                } else if (res.code === "A0001") {
-                  this.$notify.error("修改失败！");
-                } else if (res.code === "A0004") {
-                  this.$notify.error("服务器异常！");
-                }
-              });
-          }
         }
       });
     },

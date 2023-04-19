@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 
 const request = axios.create({
     baseURL: 'http://127.0.0.1:9090',
-    timeout: 5000
+    timeout: 20000
 })
 
 // request 拦截器

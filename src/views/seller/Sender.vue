@@ -5,12 +5,6 @@
       <el-button style="margin-left: 5px" type="primary" @click="preSenderAdd"
         ><i class="el-icon-circle-plus-outline">新增</i></el-button
       >
-      <el-button style="margin-left: 5px" type="primary" @click="wzh"
-        ><i class="el-icon-bottom">导入</i></el-button
-      >
-      <el-button style="margin-left: 5px" type="primary" @click="wzh"
-        ><i class="el-icon-top">导出</i></el-button
-      >
     </div>
     <!--表格-->
     <el-table

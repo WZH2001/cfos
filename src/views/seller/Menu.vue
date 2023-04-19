@@ -36,12 +36,6 @@
           ><i class="el-icon-remove-outline"></i>批量删除</el-button
         >
       </el-popconfirm>
-      <el-button style="margin-left: 5px" type="primary" @click="load"
-        ><i class="el-icon-bottom">导入</i></el-button
-      >
-      <el-button style="margin-left: 5px" type="primary" @click="reset"
-        ><i class="el-icon-top">导出</i></el-button
-      >
     </div>
     <!--表格-->
     <el-table
