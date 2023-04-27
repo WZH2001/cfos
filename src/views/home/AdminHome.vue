@@ -63,18 +63,6 @@ export default {
               formatter: "{value} 元",
             },
           },
-          {
-            type: "value",
-            name: "Evaporation",
-            position: "right",
-            alignTicks: true,
-            axisLine: {
-              show: true,
-            },
-            axisLabel: {
-              formatter: "{value} ml",
-            },
-          },
         ],
         series: [
           {
